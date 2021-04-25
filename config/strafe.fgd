@@ -1,0 +1,9 @@
+@SolidClass base(Trigger) = timer_start :
+	"A trigger that starts the timer on exit."
+[
+]
+
+@SolidClass base(Trigger) = timer_end :
+	"A trigger that ends the timer on enter."
+[
+]
