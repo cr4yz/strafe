@@ -37,7 +37,13 @@ namespace Strafe
 				case "respawn":
 				case "r":
 				case "spawn":
-					StrafePlayer.SpawnPlayer( player );
+					player.Respawn();
+					break;
+				case "rall":
+					foreach(var p in Player.All )
+					{
+						p.Respawn();
+					}
 					break;
 			}
 		}

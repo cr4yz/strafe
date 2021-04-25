@@ -24,9 +24,9 @@ namespace Strafe.UI
 		{
 			base.Tick();
 
-			if ( TimeSinceBorn > 10 )
+			if ( TimeSinceBorn > 120 )
 			{
-				//Delete();
+				Delete();
 			}
 		}
 	}

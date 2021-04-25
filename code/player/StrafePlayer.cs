@@ -1,4 +1,5 @@
 using Sandbox;
+using Strafe.Timer;
 using Strafe.Weapons;
 using System;
 using System.Collections.Generic;
@@ -13,12 +14,13 @@ namespace Strafe.Ply
     {
 
 		public bool SuppressPickupNotices { get; private set; }
+		public StrafeTimer Timer { get; private set; }
 
         public StrafePlayer()
         {
-            Log.Info("RP Player");
 			Inventory = new StrafeInventory( this );
-        }
+			Timer = new StrafeTimer( this );
+		}
 
         public override void Respawn()
         {
@@ -26,27 +28,33 @@ namespace Strafe.Ply
             Controller = new StrafeWalkController();
             Animator = new StandardPlayerAnimator();
             Camera = new StrafeFirstPersonCamera();
-            EnableAllCollisions = true;
+            //EnableAllCollisions = true;
             EnableDrawing = true;
             EnableHideInFirstPerson = true;
             EnableShadowInFirstPerson = true;
 
+			ClearCollisionLayers();
+			RemoveCollisionLayer( CollisionLayer.Player );
+			CollisionGroup = CollisionGroup.ConditionallySolid;
+
+			var strafeController = Controller as StrafeWalkController;
+			strafeController.AutoJump = true;
+			strafeController.AirAcceleration = 1500;
+			strafeController.AirControl = 30;
+
+			Dress();
+
 			//Inventory.Add( new Smg(), true );
-			GiveAmmo( AmmoType.Pistol, 900 );
+			//GiveAmmo( AmmoType.Pistol, 900 );
 
 			base.Respawn();
 		}
 
-		public override void BuildInput( ClientInput input )
+		protected override void Tick()
 		{
-			base.BuildInput( input );
+			base.Tick();
 
-			//input.ViewAngles = Angles.Zero;
-		}
-
-		public static void SpawnPlayer( Player player )
-		{
-			player?.Respawn();
+			TickTimer();
 		}
 
 	}
