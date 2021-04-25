@@ -1,0 +1,28 @@
+{
+    "name": "strafe",
+    "version": "1.0",
+    "sharedassets": "*.*",
+    
+    "depends": 
+    [
+        "base",
+		"rust",
+        "citizen" // Optional if you already have a model and animations, etc.
+    ],
+
+    //
+    // Addons can contain multiple addons, describe them here
+    //
+    "gamemodes":
+    [
+        {
+            // These will show in the console when you load into the game.
+            // They will not show on the gamemode list! To do that make an organization
+            // and fill the proper information on gamemode creation.
+            "name": "strafe",
+            "title": "Strafe",
+            "description": "Strafe based speedrunning",
+			"icon": "https://i.imgur.com/yUNUMAO.jpg"
+        }
+    ]
+}
