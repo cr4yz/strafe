@@ -35,7 +35,7 @@ namespace Strafe.Ply
 			if ( IsActive )
 			{
 				Controller.SetTag( "ducked" );
-				Controller.ViewOffset *= 0.5f;
+				Controller.ViewOffset *= 0.65f;
 			}
 		}
 
