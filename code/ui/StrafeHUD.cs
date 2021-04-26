@@ -13,10 +13,14 @@ namespace Strafe.UI
     {
         public StrafeHUD()
         {
-            if (!IsClient) return;
+			if ( !IsClient )
+			{
+				return;
+			}
 
             RootPanel.StyleSheet.Load("/ui/hud.scss");
             RootPanel.AddChild<StrafeChatBox>();
+            RootPanel.AddChild<TimerHud>();
 			RootPanel.AddChild<VoiceList>();
 			RootPanel.AddChild<Scoreboard<ScoreboardEntry>>();
             RootPanel.AddChild<NameTags>().MaxDrawDistance = 800;

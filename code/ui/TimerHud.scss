@@ -1,0 +1,16 @@
+timerhud {
+    position: absolute;
+    left: 50%;
+    bottom: 200px;
+    transform: translateX(-50%);
+    padding: 6px 12px;
+    background-color: rgba(black, 0.5);
+    border-radius: 6px;
+    font-size: 14px;
+    font-family: Tahoma;
+    color: white;
+
+    label {
+        text-align: center;
+    }
+}

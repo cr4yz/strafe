@@ -28,26 +28,24 @@ namespace Strafe.Ply
             Controller = new StrafeWalkController();
             Animator = new StandardPlayerAnimator();
             Camera = new StrafeFirstPersonCamera();
-            //EnableAllCollisions = true;
+            EnableAllCollisions = true;
             EnableDrawing = true;
             EnableHideInFirstPerson = true;
             EnableShadowInFirstPerson = true;
 
-			ClearCollisionLayers();
-			RemoveCollisionLayer( CollisionLayer.Player );
-			CollisionGroup = CollisionGroup.ConditionallySolid;
+			Dress();
 
 			var strafeController = Controller as StrafeWalkController;
 			strafeController.AutoJump = true;
 			strafeController.AirAcceleration = 1500;
 			strafeController.AirControl = 30;
 
-			Dress();
-
 			//Inventory.Add( new Smg(), true );
 			//GiveAmmo( AmmoType.Pistol, 900 );
 
 			base.Respawn();
+
+			RemoveCollisionLayer( CollisionLayer.Solid );
 		}
 
 		protected override void Tick()
