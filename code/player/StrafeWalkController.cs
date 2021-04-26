@@ -153,7 +153,6 @@ namespace Strafe.Ply
 
 			if ( AutoJump ? Input.Down( InputButton.Jump ) : Input.Pressed( InputButton.Jump ) )
 			{
-				JustJumped = true;
 				CheckJumpButton();
 			}
 
@@ -531,7 +530,7 @@ namespace Strafe.Ply
 			// don't jump again until released
 			//mv->m_nOldButtons |= IN_JUMP;
 
-			AddEvent( "jump" );
+			JustJumped = true;
 
 		}
 

@@ -5,25 +5,19 @@ namespace Strafe.Entities
 {
 
 	[Library( "trigger_timer_start" )]
-	public partial class TriggerTimerStart : ModelEntity
+	public partial class TriggerTimerStart : BaseTrigger
 	{
-
-		public override void Spawn()
-		{
-			base.Spawn();
-
-			SetupPhysicsFromModel( PhysicsMotionType.Static );
-			CollisionGroup = CollisionGroup.Trigger;
-			EnableSolidCollisions = false;
-			EnableTouch = true;
-			EnableTouchPersists = true;
-
-			Transmit = TransmitType.Never;
-		}
 
 		public override void StartTouch( Entity other )
 		{
 			base.StartTouch( other );
+
+			if ( other is not StrafePlayer player )
+			{
+				return;
+			}
+
+			player.TimerState = TimerState.InStartZone;
 		}
 
 		public override void EndTouch( Entity other )
@@ -35,7 +29,10 @@ namespace Strafe.Entities
 				return;
 			}
 
-			player.Time = 0;
+			player.TimerState = TimerState.Running;
+			player.TimerTime = 0;
+			player.TimerJumps = 0;
+			player.TimerStrafes = 0;
 		}
 
 	}
