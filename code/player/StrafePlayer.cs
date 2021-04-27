@@ -16,6 +16,8 @@ namespace Strafe.Ply
 		public bool SuppressPickupNotices { get; private set; }
 		public StrafeTimer Timer { get; private set; }
 
+		private float _timeSinceLastFootstep;
+
         public StrafePlayer()
         {
 			Inventory = new StrafeInventory( this );
@@ -50,6 +52,21 @@ namespace Strafe.Ply
 			base.Respawn();
 
 			RemoveCollisionLayer( CollisionLayer.Solid );
+		}
+
+        public void PlayFootstep()
+        {
+			using (Prediction.Off())
+            {
+				var tr = Trace.Ray(WorldPos, WorldPos + Vector3.Down * 200)
+					.Radius(1)
+					.Ignore(this)
+					.Run();
+
+				if (!tr.Hit) return;
+
+				tr.Surface.DoFootstep(this, tr, 0, 1);
+			}
 		}
 
 		protected override void Tick()

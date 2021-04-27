@@ -55,7 +55,7 @@ namespace Strafe.UI
             }
             else
             {
-				hud = $"{player.FormattedTime}s\n{spd} u/s\n{player.TimerJumps} jumps\n{player.TimerStrafes} strafes";
+				hud = $"{player.FormattedTimerTime}s\n{spd} u/s\n{player.TimerJumps} jumps\n{player.TimerStrafes} strafes";
 			}
 
 			_label.Text = hud;

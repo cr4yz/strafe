@@ -485,7 +485,7 @@ namespace Strafe.Ply
 
 				return;
 			}
-
+			
 			if ( GroundEntity == null )
 				return;
 
@@ -530,6 +530,7 @@ namespace Strafe.Ply
 			//mv->m_nOldButtons |= IN_JUMP;
 
 			JustJumped = true;
+			(Player as StrafePlayer).PlayFootstep();
 
 		}
 

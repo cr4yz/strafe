@@ -28,7 +28,7 @@ namespace Strafe.Entities
 
 		private void FinishRun(StrafePlayer player )
 		{
-			StrafeChatBox.AddChatEntry( Player.All, player.Name, "Timer end touched: " + player.FormattedTime, $"avatar:{player.SteamId}" );
+			StrafeChatBox.AddChatEntry( Player.All, player.Name, "Timer end touched: " + player.FormattedTimerTime, $"avatar:{player.SteamId}" );
 		}
 
 	}

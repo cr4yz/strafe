@@ -14,6 +14,7 @@ namespace Strafe.UI
 		public RealTimeSince TimeSinceBorn = 0;
 
 		public bool Faded => TimeSinceBorn > 12;
+		private bool _faded;
 
 		public StrafeChatEntry()
 		{
@@ -21,5 +22,17 @@ namespace Strafe.UI
 			NameLabel = Add.Label( "Name", "name" );
 			Message = Add.Label( "Message", "message" );
 		}
-	}
+
+        public override void Tick()
+        {
+            base.Tick();
+
+			if(!_faded && Faded)
+            {
+				AddClass("faded");
+				_faded = true;
+            }
+        }
+
+    }
 }

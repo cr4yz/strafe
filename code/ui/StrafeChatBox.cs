@@ -40,12 +40,14 @@ namespace Strafe.UI
 		void Open()
 		{
 			AddClass( "open" );
+			RemoveClass( "closed" );
 			Input.Focus();
 		}
 
 		void Close()
 		{
 			RemoveClass( "open" );
+			AddClass( "closed" );
 			Input.Blur();
 		}
 
@@ -76,7 +78,7 @@ namespace Strafe.UI
 			e.SetClass( "noname", string.IsNullOrEmpty( name ) );
 			e.SetClass( "noavatar", string.IsNullOrEmpty( avatar ) );
 
-			Canvas.TryScroll(.5f);
+			Canvas.PreferScrollToBottom = true;
 		}
 
 		[ClientCmd( "chat_add", CanBeCalledFromServer = true )]
