@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Strafe.Entities;
 
 namespace Strafe
 {
@@ -60,6 +61,15 @@ namespace Strafe
 					{
 						p.Respawn();
 					}
+					break;
+				case "removebots":
+					foreach(var ent in Entity.All)
+                    {
+						if(ent is ReplayBot && ent.IsValid())
+                        {
+							ent.Delete();
+                        }
+                    }
 					break;
 			}
 		}

@@ -7,3 +7,8 @@
 	"A trigger that ends the timer on enter."
 [
 ]
+
+@SolidClass base(Trigger) = trigger_timer_cp :
+	"A trigger that sets a checkpoint in a run."
+[
+]

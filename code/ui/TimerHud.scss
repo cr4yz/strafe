@@ -4,11 +4,11 @@ timerhud {
     bottom: 200px;
     transform: translateX(-50%);
     padding: 6px 12px;
-    background-color: rgba(black, 0.5);
     border-radius: 6px;
-    font-size: 14px;
-    font-family: Tahoma;
+    font-size: 18px;
+    font-family: Consolas;
     color: white;
+    text-shadow:1px 1px 1px black;
 
     label {
         text-align: center;

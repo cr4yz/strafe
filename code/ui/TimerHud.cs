@@ -29,36 +29,24 @@ namespace Strafe.UI
 		{
 			base.Tick();
 
-			var player = Player.Local as StrafePlayer;
-			if( player == null || player.Controller == null )
-			{
-				if(HasClass( "open" ) )
-				{
-					RemoveClass( "open" );
-				}
+			if(Player.Local is not StrafePlayer player || player.Controller == null)
+            {
 				return;
-			}
+            }
 
-			if(!HasClass("open"))
-			{
-				AddClass( "open" );
-			}
-
-			var vel = player.Controller.Velocity;
-			vel.z = 0;
-			var spd = (int)vel.Length;
-			string hud;
+			var speed = player.HorizontalSpeed;
 
 			if(player.TimerState != TimerState.Running)
             {
-				hud = $"{player.TimerState}\n{spd} u/s";
+				var state = player.TimerState == TimerState.InStartZone
+					? "In Start Zone"
+					: player.TimerState.ToString();
+				_label.Text = $"{state}\n{speed} u/s";
             }
             else
             {
-				hud = $"{player.FormattedTimerTime}s\n{spd} u/s\n{player.TimerJumps} jumps\n{player.TimerStrafes} strafes";
+				_label.Text = $"{player.FormattedTimerTime}s\n{speed} u/s\n{player.TimerJumps} jumps\n{player.TimerStrafes} strafes";
 			}
-
-			_label.Text = hud;
 		}
 
 	}

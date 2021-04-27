@@ -1,6 +1,7 @@
 using Sandbox;
-using Strafe.Weapons;
+using Strafe.Entities;
 using System;
+using System.Text;
 
 namespace Strafe.Ply
 {
@@ -23,12 +24,45 @@ namespace Strafe.Ply
 		[Net]
 		public float TimerTime { get; set; }
 
-		public string FormattedTimerTime => TimeSpan.FromSeconds( TimerTime ).ToString( @"mm\:ss\:fff" );
+		public string FormattedTimerTime => TimeSpan.FromSeconds( TimerTime ).ToString( @"mm\:ss\.fff" );
+		public int HorizontalSpeed
+        {
+			get => (int)Velocity.WithZ(0).Length;
+			set 
+			{
+				var v = Velocity.WithZ(0).ClampLength(value);
+				v.z = Velocity.z;
+				Velocity = v;
+			}
+		}
 
 		private bool _wasLeft;
 		private bool _wasRight;
 
-		protected void TickTimer()
+		public void StartTimer()
+        {
+			_replay.Clear();
+
+			TimerState = TimerState.Running;
+			TimerTime = 0;
+			TimerJumps = 0;
+			TimerStrafes = 0;
+
+			// Don't let the player prespeed
+			// If they do prespeed drop to below prestrafe velocity so it can't be abused.
+			if (HorizontalSpeed >= 290)
+			{
+				HorizontalSpeed = 280;
+			}
+        }
+
+		public void FinishTimer()
+        {
+			ReplayBot.WithClonedReplay(_replay);
+			_replay.Clear();
+		}
+
+		private void TickTimer()
 		{
 			if ( TimerState != TimerState.Running )
 			{
@@ -59,23 +93,12 @@ namespace Strafe.Ply
 			_wasRight = isRight;
 
 			TimerTime += Time.Delta;
+
+			if(IsServer)
+            {
+				_replay.Tick();
+			}
 		}
-
-		public int HorizontalSpeed()
-        {
-			var result = Velocity;
-			result.z = 0;
-			return (int)result.Length;
-        }
-
-		public void ClampHorizontalVelocity(int speed)
-        {
-			var vel = Velocity;
-			vel.z = 0;
-			vel = vel.ClampLength(speed);
-			vel.z = Velocity.z;
-			Velocity = vel;
-        }
 
 	}
 }

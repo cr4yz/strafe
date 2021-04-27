@@ -17,12 +17,14 @@ namespace Strafe.Ply
         public bool SuppressPickupNotices { get; private set; }
         public StrafeTimer Timer { get; private set; }
 
-        private float _timeSinceLastFootstep;
+        private Replay _replay;
 
         public StrafePlayer()
         {
             Inventory = new StrafeInventory(this);
             Timer = new StrafeTimer(this);
+            _replay = new Replay(this);
+            _replay.Mode = ReplayMode.Record;
         }
 
         public override void Respawn()
@@ -45,7 +47,7 @@ namespace Strafe.Ply
             strafeController.GroundFriction = 4;
             strafeController.AirControl = 30;
             strafeController.StopSpeed = 75;
-            strafeController.DefaultSpeed = 273.0f;
+            strafeController.DefaultSpeed = 260.5f;
 
             //Inventory.Add( new Smg(), true );
             //GiveAmmo( AmmoType.Pistol, 900 );

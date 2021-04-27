@@ -21,7 +21,8 @@ namespace Strafe.UI
             RootPanel.StyleSheet.Load("/ui/hud.scss");
             RootPanel.AddChild<StrafeChatBox>();
             RootPanel.AddChild<TimerHud>();
-			RootPanel.AddChild<VoiceList>();
+            RootPanel.AddChild<WrHud>();
+            RootPanel.AddChild<VoiceList>();
 			RootPanel.AddChild<StrafeScoreboard<StrafeScoreboardEntry>>();
             RootPanel.AddChild<NameTags>().MaxDrawDistance = 800;
 		}
