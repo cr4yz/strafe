@@ -11,19 +11,19 @@ using System.Threading.Tasks;
 
 namespace Strafe.Ply
 {
-	public partial class StrafePlayer : BasePlayer
+    public partial class StrafePlayer : BasePlayer
     {
 
-		public bool SuppressPickupNotices { get; private set; }
-		public StrafeTimer Timer { get; private set; }
+        public bool SuppressPickupNotices { get; private set; }
+        public StrafeTimer Timer { get; private set; }
 
-		private float _timeSinceLastFootstep;
+        private float _timeSinceLastFootstep;
 
         public StrafePlayer()
         {
-			Inventory = new StrafeInventory( this );
-			Timer = new StrafeTimer( this );
-		}
+            Inventory = new StrafeInventory(this);
+            Timer = new StrafeTimer(this);
+        }
 
         public override void Respawn()
         {
@@ -36,46 +36,46 @@ namespace Strafe.Ply
             EnableHideInFirstPerson = true;
             EnableShadowInFirstPerson = true;
 
-			Dress();
+            Dress();
 
-			var strafeController = Controller as StrafeWalkController;
-			strafeController.AutoJump = true;
-			strafeController.AirAcceleration = 1000;
-			strafeController.Acceleration = 5;
-			strafeController.GroundFriction = 4;
-			strafeController.AirControl = 30;
-			strafeController.StopSpeed = 75;
-			strafeController.DefaultSpeed = 273.0f;
+            var strafeController = Controller as StrafeWalkController;
+            strafeController.AutoJump = true;
+            strafeController.AirAcceleration = 1000;
+            strafeController.Acceleration = 5;
+            strafeController.GroundFriction = 4;
+            strafeController.AirControl = 30;
+            strafeController.StopSpeed = 75;
+            strafeController.DefaultSpeed = 273.0f;
 
-			//Inventory.Add( new Smg(), true );
-			//GiveAmmo( AmmoType.Pistol, 900 );
+            //Inventory.Add( new Smg(), true );
+            //GiveAmmo( AmmoType.Pistol, 900 );
 
-			base.Respawn();
+            base.Respawn();
 
-			RemoveCollisionLayer( CollisionLayer.Solid );
-		}
+            RemoveCollisionLayer(CollisionLayer.Solid);
+        }
 
         public void PlayFootstep()
         {
-			using (Prediction.Off())
+            using (Prediction.Off())
             {
-				var tr = Trace.Ray(WorldPos, WorldPos + Vector3.Down * 20)
-					.Radius(1)
-					.Ignore(this)
-					.Run();
+                var tr = Trace.Ray(WorldPos, WorldPos + Vector3.Down * 20)
+                    .Radius(1)
+                    .Ignore(this)
+                    .Run();
 
-				if (!tr.Hit) return;
+                if (!tr.Hit) return;
 
-				tr.Surface.DoFootstep(this, tr, 0, 1);
-			}
-		}
+                tr.Surface.DoFootstep(this, tr, 0, 1);
+            }
+        }
 
-		protected override void Tick()
-		{
-			base.Tick();
+        protected override void Tick()
+        {
+            base.Tick();
 
-			TickTimer();
-		}
+            TickTimer();
+        }
 
-	}
+    }
 }
