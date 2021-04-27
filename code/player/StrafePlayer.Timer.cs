@@ -25,17 +25,11 @@ namespace Strafe.Ply
 
 		public string FormattedTimerTime => TimeSpan.FromSeconds( TimerTime ).ToString( @"mm\:ss\:fff" );
 
+		private bool _wasLeft;
+		private bool _wasRight;
+
 		protected void TickTimer()
 		{
-			if(!Game.Current.IsAuthority)
-			{
-				DebugOverlay.ScreenText( 0, $"             Timer: {TimerState}", Sandbox.Time.Delta * 3f );
-				DebugOverlay.ScreenText( 1, $"             Time: {FormattedTimerTime}", Sandbox.Time.Delta * 3f );
-				DebugOverlay.ScreenText( 2, $"             Jumps: {TimerJumps}", Sandbox.Time.Delta * 3f );
-
-				return;
-			}
-
 			if ( TimerState != TimerState.Running )
 			{
 				return;
@@ -52,6 +46,17 @@ namespace Strafe.Ply
 			{
 				TimerJumps++;
 			}
+
+			var isLeft = Input.Down(InputButton.Left);
+			var isRight = Input.Down(InputButton.Right);
+
+			if ((isLeft && !_wasLeft) || (isRight && !_wasRight))
+			{
+				TimerStrafes++;
+			}
+
+			_wasLeft = isLeft;
+			_wasRight = isRight;
 
 			TimerTime += Time.Delta;
 		}
