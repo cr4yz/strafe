@@ -24,7 +24,7 @@ namespace Strafe
 
 		public override Player CreatePlayer() => new StrafePlayer();
 
-		public static void OnChatCommand(Player player, string command)
+        public static void OnChatCommand(Player player, string command)
 		{
 			if ( !Game.Current.IsAuthority )
 			{

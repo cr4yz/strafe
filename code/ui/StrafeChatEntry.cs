@@ -13,21 +13,13 @@ namespace Strafe.UI
 
 		public RealTimeSince TimeSinceBorn = 0;
 
+		public bool Faded => TimeSinceBorn > 12;
+
 		public StrafeChatEntry()
 		{
 			Avatar = Add.Image();
 			NameLabel = Add.Label( "Name", "name" );
 			Message = Add.Label( "Message", "message" );
-		}
-
-		public override void Tick()
-		{
-			base.Tick();
-
-			if ( TimeSinceBorn > 120 )
-			{
-				Delete();
-			}
 		}
 	}
 }

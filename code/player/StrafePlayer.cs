@@ -37,8 +37,12 @@ namespace Strafe.Ply
 
 			var strafeController = Controller as StrafeWalkController;
 			strafeController.AutoJump = true;
-			strafeController.AirAcceleration = 1500;
+			strafeController.AirAcceleration = 1000;
+			strafeController.Acceleration = 5;
+			strafeController.GroundFriction = 4;
 			strafeController.AirControl = 30;
+			strafeController.StopSpeed = 75;
+			strafeController.DefaultSpeed = 273.0f;
 
 			//Inventory.Add( new Smg(), true );
 			//GiveAmmo( AmmoType.Pistol, 900 );

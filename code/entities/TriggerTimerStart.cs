@@ -33,6 +33,13 @@ namespace Strafe.Entities
 			player.TimerTime = 0;
 			player.TimerJumps = 0;
 			player.TimerStrafes = 0;
+
+			// Don't let the player prespeed
+			// If they do prespeed drop to below prestrafe velocity so it can't be abused.
+			if(player.HorizontalSpeed() >= 290)
+            {
+				player.ClampHorizontalVelocity(280);
+            }
 		}
 
 	}

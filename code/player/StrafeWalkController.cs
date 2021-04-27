@@ -30,7 +30,6 @@ namespace Strafe.Ply
 		public float DistEpsilon { get; set; } = 0.03125f;
 		public float GroundNormalZ { get; set; } = 0.707f;
 		public float Bounce { get; set; } = 0.0f;
-		public float MoveFriction { get; set; } = 1.0f;
 		public float StepSize { get; set; } = 18.0f;
 		public float MaxNonJumpVelocity { get; set; } = 140.0f;
 		public float BodyGirth { get; set; } = 32.0f;
@@ -250,7 +249,7 @@ namespace Strafe.Ply
 			var ws = Duck.GetWishSpeed();
 			if ( ws >= 0 ) return ws;
 
-			if ( Input.Down( InputButton.Run ) ) return SprintSpeed;
+			//if ( Input.Down( InputButton.Run ) ) return SprintSpeed;
 			if ( Input.Down( InputButton.Walk ) ) return WalkSpeed;
 
 			return DefaultSpeed;

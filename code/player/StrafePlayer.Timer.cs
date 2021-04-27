@@ -41,6 +41,12 @@ namespace Strafe.Ply
 				return;
 			}
 
+			if(DevController != null)
+            {
+				TimerState = TimerState.Ended;
+				return;
+            }
+
 			var walk = Controller as StrafeWalkController;
 			if(walk.JustJumped)
 			{
@@ -49,6 +55,22 @@ namespace Strafe.Ply
 
 			TimerTime += Time.Delta;
 		}
+
+		public int HorizontalSpeed()
+        {
+			var result = Velocity;
+			result.z = 0;
+			return (int)result.Length;
+        }
+
+		public void ClampHorizontalVelocity(int speed)
+        {
+			var vel = Velocity;
+			vel.z = 0;
+			vel = vel.ClampLength(speed);
+			vel.z = Velocity.z;
+			Velocity = vel;
+        }
 
 	}
 }

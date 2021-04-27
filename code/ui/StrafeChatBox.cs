@@ -64,6 +64,9 @@ namespace Strafe.UI
 
 		public void AddEntry( string name, string message, string avatar )
 		{
+			var toRemove = Canvas.ChildCount > 50 ? Canvas.ChildCount - 50 : 0;
+			Canvas.Children.Take(toRemove).ToList().ForEach(x => x.Delete());
+
 			var e = Canvas.AddChild<StrafeChatEntry>();
 			//e.SetFirstSibling();
 			e.Message.Text = message;
@@ -72,6 +75,8 @@ namespace Strafe.UI
 
 			e.SetClass( "noname", string.IsNullOrEmpty( name ) );
 			e.SetClass( "noavatar", string.IsNullOrEmpty( avatar ) );
+
+			Canvas.TryScroll(.5f);
 		}
 
 		[ClientCmd( "chat_add", CanBeCalledFromServer = true )]

@@ -44,7 +44,21 @@ namespace Strafe.UI
 				AddClass( "open" );
 			}
 
-			_label.Text = $"{player.TimerState}\n{player.FormattedTime}s\n{player.TimerJumps} jumps";
+			var vel = player.Controller.Velocity;
+			vel.z = 0;
+			var spd = (int)vel.Length;
+			string hud;
+
+			if(player.TimerState != TimerState.Running)
+            {
+				hud = $"{player.TimerState}\n{spd} u/s";
+            }
+            else
+            {
+				hud = $"{player.FormattedTime}s\n{spd} u/s\n{player.TimerJumps} jumps\n{player.TimerStrafes} strafes";
+			}
+
+			_label.Text = hud;
 		}
 
 	}

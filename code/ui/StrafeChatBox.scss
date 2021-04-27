@@ -4,8 +4,9 @@ strafechatbox {
     left: 100px;
     z-index: 100;
     flex-direction: column;
+    justify-content:flex-end;
     width: 650px;
-    //actuallyheight:500;
+    height:500px;
     font-family: Verdana;
     font-weight:500;
     font-size: 15px;
