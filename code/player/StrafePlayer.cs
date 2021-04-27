@@ -58,7 +58,7 @@ namespace Strafe.Ply
         {
 			using (Prediction.Off())
             {
-				var tr = Trace.Ray(WorldPos, WorldPos + Vector3.Down * 200)
+				var tr = Trace.Ray(WorldPos, WorldPos + Vector3.Down * 20)
 					.Radius(1)
 					.Ignore(this)
 					.Run();
