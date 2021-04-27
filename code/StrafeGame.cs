@@ -9,13 +9,15 @@ using System.Threading.Tasks;
 
 namespace Strafe
 {
-    [Library("strafe", Title = "Strafe Speedruns")]
+    [Library("strafe", Title = "Strafe")]
     partial class StrafeGame : Game
     {
-        public StrafeGame()
-        {
-            Log.Info( "Strafe Speedruns Started" );
 
+		public event Action<StrafePlayer> OnPlayerJoined;
+		public event Action<StrafePlayer> OnPlayerDisconnected;
+
+		public StrafeGame()
+        {
             if (IsServer)
 			{
 				new StrafeHUD();
@@ -23,6 +25,20 @@ namespace Strafe
         }
 
 		public override Player CreatePlayer() => new StrafePlayer();
+
+        public override void PlayerJoined(Player player)
+        {
+            base.PlayerJoined(player);
+
+			OnPlayerJoined?.Invoke(player as StrafePlayer);
+        }
+
+        public override void PlayerDisconnected(Player player, NetworkDisconnectionReason reason)
+        {
+            base.PlayerDisconnected(player, reason);
+
+			OnPlayerDisconnected?.Invoke(player as StrafePlayer);
+		}
 
         public static void OnChatCommand(Player player, string command)
 		{

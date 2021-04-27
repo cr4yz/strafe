@@ -30,7 +30,7 @@ namespace Strafe.UI
 			base.Tick();
 
 			var player = Player.Local as StrafePlayer;
-			if( player == null )
+			if( player == null || player.Controller == null )
 			{
 				if(HasClass( "open" ) )
 				{

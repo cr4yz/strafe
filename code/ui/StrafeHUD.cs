@@ -22,7 +22,7 @@ namespace Strafe.UI
             RootPanel.AddChild<StrafeChatBox>();
             RootPanel.AddChild<TimerHud>();
 			RootPanel.AddChild<VoiceList>();
-			RootPanel.AddChild<Scoreboard<ScoreboardEntry>>();
+			RootPanel.AddChild<StrafeScoreboard<StrafeScoreboardEntry>>();
             RootPanel.AddChild<NameTags>().MaxDrawDistance = 800;
 		}
     }
