@@ -15,14 +15,12 @@ namespace Strafe.Ply
     {
 
         public bool SuppressPickupNotices { get; private set; }
-        public StrafeTimer Timer { get; private set; }
 
         private Replay _replay;
 
         public StrafePlayer()
         {
             Inventory = new StrafeInventory(this);
-            Timer = new StrafeTimer(this);
             _replay = new Replay(this);
             _replay.Mode = ReplayMode.Record;
         }
