@@ -77,10 +77,10 @@ namespace Strafe.Ply
 
 			TimerState = TimerState.Ended;
 
-			StrafeChatBox.AddChatEntry(All, Name, "Map completed: " + FormattedTimerTime, $"avatar:{SteamId}");
-
 			ReplayBot.WithClonedReplay(_replay);
 			_replay.Clear();
+
+			StrafeChatBox.AddChatEntry(All, Name, $"Map completed in {FormattedTimerTime}s", $"avatar:{SteamId}");
 		}
 
 		public void SetCheckpoint(TriggerTimerCp cp)
