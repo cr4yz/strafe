@@ -18,17 +18,6 @@ namespace Strafe.Entities
 				return;
 			}
 
-			player.TimerState = TimerState.Ended;
-
-			if(Game.Current.IsServer)
-			{
-				FinishRun( player );
-			}
-		}
-
-		private void FinishRun(StrafePlayer player )
-		{
-			StrafeChatBox.AddChatEntry( Player.All, player.Name, "Timer end touched: " + player.FormattedTimerTime, $"avatar:{player.SteamId}" );
 			player.FinishTimer();
 		}
 

@@ -1,6 +1,8 @@
 using Sandbox;
 using Strafe.Entities;
+using Strafe.UI;
 using System;
+using System.Collections.Generic;
 using System.Text;
 
 namespace Strafe.Ply
@@ -23,6 +25,10 @@ namespace Strafe.Ply
 		public int TimerStrafes { get; set; }
 		[Net]
 		public float TimerTime { get; set; }
+		[Net]
+		public int TimerCheckpoint { get; set; }
+		[Net]
+		public int TimerStage { get; set; }
 
 		public string FormattedTimerTime => TimeSpan.FromSeconds( TimerTime ).ToString( @"mm\:ss\.fff" );
 		public int HorizontalSpeed
@@ -38,6 +44,7 @@ namespace Strafe.Ply
 
 		private bool _wasLeft;
 		private bool _wasRight;
+		private HashSet<TriggerTimerCp> _touchedCheckpoints = new HashSet<TriggerTimerCp>();
 
 		public void StartTimer()
         {
@@ -47,6 +54,10 @@ namespace Strafe.Ply
 			TimerTime = 0;
 			TimerJumps = 0;
 			TimerStrafes = 0;
+            TimerCheckpoint = 0;
+			TimerStage = 0;
+
+			_touchedCheckpoints.Clear();
 
 			// Don't let the player prespeed
 			// If they do prespeed drop to below prestrafe velocity so it can't be abused.
@@ -58,13 +69,38 @@ namespace Strafe.Ply
 
 		public void FinishTimer()
         {
+            if (!IsServer
+				|| TimerState != TimerState.Running)
+            {
+				return;
+            }
+
+			TimerState = TimerState.Ended;
+
+			StrafeChatBox.AddChatEntry(All, Name, "Map completed: " + FormattedTimerTime, $"avatar:{SteamId}");
+
 			ReplayBot.WithClonedReplay(_replay);
 			_replay.Clear();
 		}
 
+		public void SetCheckpoint(TriggerTimerCp cp)
+        {
+			if(!IsServer
+				|| TimerState != TimerState.Running
+				|| _touchedCheckpoints.Contains(cp))
+            {
+				return;
+            }
+
+			_touchedCheckpoints.Add(cp);
+			TimerCheckpoint++;
+
+			StrafeChatBox.AddChatEntry(this, Name, $"Checkpoint #{TimerCheckpoint} in {FormattedTimerTime}s", $"avatar:{SteamId}");
+		}
+
 		private void TickTimer()
 		{
-			if ( TimerState != TimerState.Running )
+			if ( TimerState != TimerState.Running || IsClient )
 			{
 				return;
 			}
@@ -94,10 +130,7 @@ namespace Strafe.Ply
 
 			TimerTime += Time.Delta;
 
-			if(IsServer)
-            {
-				_replay.Tick();
-			}
+			_replay.Tick();
 		}
 
 	}

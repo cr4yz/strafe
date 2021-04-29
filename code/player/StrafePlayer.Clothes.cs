@@ -37,7 +37,7 @@ namespace Strafe.Ply
 				pants.EnableShadowInFirstPerson = true;
 				pants.EnableHideInFirstPerson = true;
 
-				SetBodygroup( "Legs", 1 );
+				SetBodyGroup( "Legs", 1 );
 			}
 
 			if ( true )
@@ -59,11 +59,11 @@ namespace Strafe.Ply
 				var propInfo = jacket.GetModel().GetPropData();
 				if ( propInfo.ParentBodyGroupName != null )
 				{
-					SetBodygroup( propInfo.ParentBodyGroupName, propInfo.ParentBodyGroupValue );
+					SetBodyGroup( propInfo.ParentBodyGroupName, propInfo.ParentBodyGroupValue );
 				}
 				else
 				{
-					SetBodygroup( "Chest", 0 );
+					SetBodyGroup( "Chest", 0 );
 				}
 			}
 
@@ -81,7 +81,7 @@ namespace Strafe.Ply
 				shoes.EnableShadowInFirstPerson = true;
 				shoes.EnableHideInFirstPerson = true;
 
-				SetBodygroup( "Feet", 1 );
+				SetBodyGroup( "Feet", 1 );
 			}
 
 			if ( true )

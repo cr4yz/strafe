@@ -8,7 +8,6 @@ using System.Threading.Tasks;
 
 namespace Strafe.Entities
 {
-
     public class ReplayBot : ModelEntity, IPhysicsUpdate
     {
 
