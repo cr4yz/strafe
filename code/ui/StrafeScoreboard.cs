@@ -36,14 +36,16 @@ namespace Strafe.UI
 
 			SetClass("open", open);
 
-            if (open)
+            if (!open)
             {
-				foreach(var child in Canvas.Children)
+				return;
+            }
+
+			foreach(var child in Canvas.Children)
+            {
+				if(child is StrafeScoreboardEntry ss)
                 {
-					if(child is StrafeScoreboardEntry ss)
-                    {
-						ss.UpdateText();
-                    }
+					ss.UpdateText();
                 }
             }
 		}
