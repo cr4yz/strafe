@@ -9,16 +9,16 @@ using System.Threading.Tasks;
 namespace Strafe.UI
 {
     [Library]
-    public partial class StrafeHUD : Hud
+    public partial class StrafeHud : Hud
     {
-        public StrafeHUD()
+        public StrafeHud()
         {
 			if ( !IsClient )
 			{
 				return;
 			}
 
-            RootPanel.StyleSheet.Load("/ui/hud.scss");
+            RootPanel.StyleSheet.Load("/ui/StrafeHud.scss");
             RootPanel.AddChild<StrafeChatBox>();
             RootPanel.AddChild<TimerHud>();
             RootPanel.AddChild<WrHud>();

@@ -21,7 +21,7 @@ namespace Strafe
         {
             if (IsServer)
 			{
-				new StrafeHUD();
+				new StrafeHud();
 			}
         }
 
