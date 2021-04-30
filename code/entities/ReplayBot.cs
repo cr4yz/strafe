@@ -8,14 +8,15 @@ using System.Threading.Tasks;
 
 namespace Strafe.Entities
 {
-    public class ReplayBot : ModelEntity, IPhysicsUpdate
+    public class ReplayBot : ModelEntity
     {
 
         public Replay Replay;
 
-        public void OnPostPhysicsStep(float dt)
+        [Event("server.tick")]
+        private void Tick()
         {
-            if (Replay == null || !IsServer)
+            if (Replay == null)
             {
                 return;
             }

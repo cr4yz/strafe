@@ -98,9 +98,10 @@ namespace Strafe.Ply
 			StrafeChatBox.AddChatEntry(this, Name, $"Checkpoint #{TimerCheckpoint} in {FormattedTimerTime}s", $"avatar:{SteamId}");
 		}
 
+		[Event("server.tick")]
 		private void TickTimer()
 		{
-			if ( TimerState != TimerState.Running || IsClient )
+			if ( TimerState != TimerState.Running )
 			{
 				return;
 			}

@@ -20,13 +20,13 @@ namespace Strafe.Ply
 
 		public float SprintSpeed { get; set; } = 320.0f;
 		public float WalkSpeed { get; set; } = 150.0f;
-		public float DefaultSpeed { get; set; } = 190.0f;
-		public float Acceleration { get; set; } = 10.0f;
-		public float AirAcceleration { get; set; } = 1500f;
+		public float DefaultSpeed { get; set; } = 260.5f;
+		public float Acceleration { get; set; } = 5.0f;
+		public float AirAcceleration { get; set; } = 1000f;
 		public float FallSoundZ { get; set; } = -30.0f;
 		public float GroundFriction { get; set; } = 4.0f;
-		public float StopSpeed { get; set; } = 100.0f;
-		public float Size { get; set; } = 20.0f;
+		public float StopSpeed { get; set; } = 75.0f;
+		public float Size { get; set; } = 20.0f; 
 		public float DistEpsilon { get; set; } = 0.03125f;
 		public float GroundNormalZ { get; set; } = 0.707f;
 		public float Bounce { get; set; } = 0.0f;
@@ -38,7 +38,7 @@ namespace Strafe.Ply
 		public float Gravity { get; set; } = 800.0f;
 		public float AirControl { get; set; } = 30.0f;
 		public bool Swimming { get; set; } = false;
-		public bool AutoJump { get; set; } = false;
+		public bool AutoJump { get; set; } = true;
 
 		public StrafeDuck Duck;
 		public Unstuck Unstuck;

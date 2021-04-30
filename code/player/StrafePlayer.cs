@@ -1,13 +1,5 @@
 using Sandbox;
 using Strafe.Timer;
-using Strafe.Weapons;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http;
-using System.Numerics;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Strafe.Ply
 {
@@ -17,6 +9,7 @@ namespace Strafe.Ply
         public bool SuppressPickupNotices { get; private set; }
 
         private Replay _replay;
+        private StrafeWalkController _controller;
 
         public StrafePlayer()
         {
@@ -28,31 +21,31 @@ namespace Strafe.Ply
         public override void Respawn()
         {
             SetModel("models/citizen/citizen.vmdl"); // If you have your own model, you can place it here instead.
-            Controller = new StrafeWalkController();
             Animator = new StandardPlayerAnimator();
             Camera = new StrafeFirstPersonCamera();
+            Controller = new StrafeWalkController();
             EnableAllCollisions = true;
             EnableDrawing = true;
             EnableHideInFirstPerson = true;
             EnableShadowInFirstPerson = true;
 
-            Dress();
-
-            var strafeController = Controller as StrafeWalkController;
-            strafeController.AutoJump = true;
-            strafeController.AirAcceleration = 1000;
-            strafeController.Acceleration = 5;
-            strafeController.GroundFriction = 4;
-            strafeController.AirControl = 30;
-            strafeController.StopSpeed = 75;
-            strafeController.DefaultSpeed = 260.5f;
+            AirAcceleration = 1000f;
+            AutoBhop = true;
 
             //Inventory.Add( new Smg(), true );
             //GiveAmmo( AmmoType.Pistol, 900 );
 
             base.Respawn();
 
+            Dress();
             RemoveCollisionLayer(CollisionLayer.Solid);
+        }
+
+        public override void Spawn()
+        {
+            base.Spawn();
+
+            StrafeFirstPersonCamera.Target = this;
         }
 
         public void PlayFootstep()
@@ -68,13 +61,6 @@ namespace Strafe.Ply
 
                 tr.Surface.DoFootstep(this, tr, 0, 1);
             }
-        }
-
-        protected override void Tick()
-        {
-            base.Tick();
-
-            TickTimer();
         }
 
     }
