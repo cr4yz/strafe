@@ -9,17 +9,17 @@ namespace Strafe.Ply
 
 		public override void Activated()
 		{
-			MoveToViewer();
+			MoveToTarget();
 		}
 
 		public override void Update()
 		{
-			MoveToViewer();
+			MoveToTarget();
 
 			FieldOfView = 80;
 		}
 
-		private void MoveToViewer()
+		private void MoveToTarget()
         {
 			Viewer = Player.Local;
 
