@@ -12,11 +12,29 @@ namespace Strafe.Ply
         private StrafeWalkController _controller;
         private TimeSince _timeSinceLastFootstep = 0;
 
+        [UserVar("cl_yawspeed", Saved = true)]
+        public static int YawSpeed { get; set; } = 160;
+
         public StrafePlayer()
         {
             Inventory = new StrafeInventory(this);
             _replay = new Replay(this);
             _replay.Mode = ReplayMode.Record;
+        }
+
+        public override void BuildInput(ClientInput input)
+        {
+            base.BuildInput(input);
+
+            if(Input.Down(InputButton.Alt1))
+            {
+                input.ViewAngles = input.ViewAngles.WithYaw(input.ViewAngles.yaw + YawSpeed * Time.Delta);
+            }
+
+            if (Input.Down(InputButton.Alt2))
+            {
+                input.ViewAngles = input.ViewAngles.WithYaw(input.ViewAngles.yaw - YawSpeed * Time.Delta);
+            }
         }
 
         public override void Respawn()
