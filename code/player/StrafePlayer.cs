@@ -42,52 +42,34 @@ namespace Strafe.Ply
             RemoveCollisionLayer(CollisionLayer.Solid);
         }
 
-        public override void Spawn()
-        {
-            base.Spawn();
-
-            StrafeFirstPersonCamera.Target = this;
-        }
-
         public override void OnAnimEventFootstep(Vector3 pos, int foot, float volume)
         {
-            if (LifeState != LifeState.Alive)
+            if (LifeState != LifeState.Alive
+                || !IsClient
+                || _timeSinceLastFootstep < 0.1f)
+            {
                 return;
-
-            if (!IsClient)
-                return;
-
-            if (_timeSinceLastFootstep < 0.1f)
-                return;
+            }
 
             _timeSinceLastFootstep = 0;
 
-            //DebugOverlay.Box( 1, pos, -1, 1, Color.Red );
-            //DebugOverlay.Text( pos, $"{volume}", Color.White, 5 );
-
-            var trBegin = new Transform(WorldPos.WithZ(WorldPos.z + 5), Rotation.Identity);
-            var trEnd = new Transform(WorldPos.WithZ(WorldPos.z - 10), Rotation.Identity);
-            var tr = Trace.Sweep(PhysicsBody, trBegin, trEnd)
-                .Ignore(this)
-                .Run();
-
-            if (!tr.Hit) return;
-
-            tr.Surface.DoFootstep(this, tr, foot, volume);
+            PlayFootstep();
         }
 
-        public void PlayFootstep()
+        public void PlayFootstep(int foot = 0, float volume = 1)
         {
             using (Prediction.Off())
             {
-                var tr = Trace.Ray(WorldPos, WorldPos + Vector3.Down * 20)
-                    .Radius(1)
+                var trBegin = new Transform(WorldPos.WithZ(WorldPos.z + 5), Rotation.Identity);
+                var trEnd = new Transform(WorldPos.WithZ(WorldPos.z - 10), Rotation.Identity);
+                var tr = Trace.Sweep(PhysicsBody, trBegin, trEnd)
                     .Ignore(this)
                     .Run();
-                
-                if (!tr.Hit) return;
 
-                tr.Surface.DoFootstep(this, tr, 0, 1);
+                if (tr.Hit)
+                {
+                    tr.Surface.DoFootstep(this, tr, foot, volume);
+                }
             }
         }
 
