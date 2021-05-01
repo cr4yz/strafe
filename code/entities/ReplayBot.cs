@@ -28,6 +28,7 @@ namespace Strafe.Entities
             DoWalk(Replay.CurrentFrame);
             SetAnimParam("b_jump", Replay.CurrentFrame.JustJumped);
             SetAnimParam("b_grounded", Replay.CurrentFrame.Grounded);
+            SetAnimParam("b_ducked", Replay.CurrentFrame.Buttons.HasFlag(InputButton.Duck));
         }
 
         public override void Spawn()

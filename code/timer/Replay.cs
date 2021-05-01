@@ -131,6 +131,7 @@ namespace Strafe.Timer
         public InputButton Buttons;
         public bool JustJumped;
         public bool Grounded;
+        public bool Ducked;
     }
 
 }
