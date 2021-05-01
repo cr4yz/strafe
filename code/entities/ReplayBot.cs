@@ -36,6 +36,8 @@ namespace Strafe.Entities
 
             SetModel("models/citizen/citizen.vmdl");
 
+            RenderColorAndAlpha = new Color32(255, 255, 255, 85);
+
             var spawn = Entity.All.FirstOrDefault(x => x.EntityName == "spawn");
             if(spawn != null)
             {
