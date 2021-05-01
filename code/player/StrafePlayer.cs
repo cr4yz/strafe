@@ -10,6 +10,7 @@ namespace Strafe.Ply
 
         private Replay _replay;
         private StrafeWalkController _controller;
+        private TimeSince _timeSinceLastFootstep = 0;
 
         public StrafePlayer()
         {
@@ -48,6 +49,33 @@ namespace Strafe.Ply
             StrafeFirstPersonCamera.Target = this;
         }
 
+        public override void OnAnimEventFootstep(Vector3 pos, int foot, float volume)
+        {
+            if (LifeState != LifeState.Alive)
+                return;
+
+            if (!IsClient)
+                return;
+
+            if (_timeSinceLastFootstep < 0.1f)
+                return;
+
+            _timeSinceLastFootstep = 0;
+
+            //DebugOverlay.Box( 1, pos, -1, 1, Color.Red );
+            //DebugOverlay.Text( pos, $"{volume}", Color.White, 5 );
+
+            var trBegin = new Transform(WorldPos.WithZ(WorldPos.z + 5), Rotation.Identity);
+            var trEnd = new Transform(WorldPos.WithZ(WorldPos.z - 10), Rotation.Identity);
+            var tr = Trace.Sweep(PhysicsBody, trBegin, trEnd)
+                .Ignore(this)
+                .Run();
+
+            if (!tr.Hit) return;
+
+            tr.Surface.DoFootstep(this, tr, foot, volume);
+        }
+
         public void PlayFootstep()
         {
             using (Prediction.Off())
@@ -56,7 +84,7 @@ namespace Strafe.Ply
                     .Radius(1)
                     .Ignore(this)
                     .Run();
-
+                
                 if (!tr.Hit) return;
 
                 tr.Surface.DoFootstep(this, tr, 0, 1);
