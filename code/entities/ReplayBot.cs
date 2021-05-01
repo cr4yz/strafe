@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Strafe.Entities
 {
-    public class ReplayBot : ModelEntity
+    public class ReplayBot : AnimEntity
     {
 
         public Replay Replay;
@@ -28,7 +28,7 @@ namespace Strafe.Entities
         {
             base.Spawn();
 
-            SetModel("models/citizen/clothes/ghost.vmdl");
+            SetModel("models/citizen/citizen.vmdl");
 
             var spawn = Entity.All.FirstOrDefault(x => x.EntityName == "spawn");
             if(spawn != null)
