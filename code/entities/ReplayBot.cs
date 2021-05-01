@@ -22,6 +22,12 @@ namespace Strafe.Entities
             }
             Replay.Mode = ReplayMode.Playback;
             Replay.Tick();
+            WorldPos = Replay.CurrentFrame.Position;
+            WorldAng = Replay.CurrentFrame.Angles;
+
+            DoWalk(Replay.CurrentFrame);
+            SetAnimParam("b_jump", Replay.CurrentFrame.JustJumped);
+            SetAnimParam("b_grounded", Replay.CurrentFrame.Grounded);
         }
 
         public override void Spawn()
@@ -49,6 +55,23 @@ namespace Strafe.Entities
             clonedReplay.Mode = ReplayMode.Playback;
             result.Replay = clonedReplay;
             return result;
+        }
+
+        void DoWalk(ReplayFrame frame)
+        {
+            SetAnimParam("walkspeed_scale", 2.0f / 260.0f);
+            SetAnimParam("runspeed_scale", 2.0f / 260.0f);
+            SetAnimParam("duckspeed_scale", 2.0f / 80.0f);
+
+            var rot = Rotation.From(frame.Angles);
+            var moveDir = frame.Velocity.Normal * 100.0f;
+            var forward = rot.Forward.Dot(moveDir);
+            var sideward = rot.Left.Dot(moveDir);
+            var speedScale = WorldScale;
+
+            SetAnimParam("forward", forward);
+            SetAnimParam("sideward", sideward);
+            SetAnimParam("wishspeed", speedScale > 0.0f ? frame.Velocity.Length / speedScale : 0.0f);
         }
 
     }

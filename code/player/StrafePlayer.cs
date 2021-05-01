@@ -6,15 +6,15 @@ namespace Strafe.Ply
     public partial class StrafePlayer : BasePlayer
     {
 
-        public bool SuppressPickupNotices { get; private set; }
-
         private Replay _replay;
         private StrafeWalkController _controller;
         private TimeSince _timeSinceLastFootstep = 0;
 
+        public bool SuppressPickupNotices { get; private set; }
+
         [UserVar("cl_yawspeed", Saved = true)]
         public static int YawSpeed { get; set; } = 160;
-
+        
         public StrafePlayer()
         {
             Inventory = new StrafeInventory(this);
