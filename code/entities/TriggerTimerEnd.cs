@@ -1,4 +1,5 @@
 using Sandbox;
+using Sandbox.Hammer;
 using Strafe.Ply;
 using Strafe.UI;
 

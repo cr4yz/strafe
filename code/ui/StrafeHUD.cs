@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace Strafe.UI
 {
     [Library]
-    public partial class StrafeHud : Hud
+    public partial class StrafeHud : HudEntity<RootPanel>
     {
         public StrafeHud()
         {

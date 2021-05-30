@@ -1,17 +1,9 @@
 using Sandbox;
-using Sandbox.Rcon;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Numerics;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace Strafe.Ply
 {
 	[Library]
-	public class StrafeDuck : NetworkClass
+	public class StrafeDuck : NetworkComponent
 	{
 		public BasePlayerController Controller;
 
@@ -34,8 +26,8 @@ namespace Strafe.Ply
 
 			if ( IsActive )
 			{
-				Controller.SetTag( "ducked" );
-				Controller.ViewOffset *= 0.65f;
+				Controller.SetTag("ducked");
+				Controller.EyePosLocal *= 0.5f;
 			}
 		}
 
@@ -46,7 +38,7 @@ namespace Strafe.Ply
 
 		void TryUnDuck()
 		{
-			var pm = Controller.TraceBBox( Controller.Pos, Controller.Pos, originalMins, originalMaxs );
+			var pm = Controller.TraceBBox( Controller.Position, Controller.Position, originalMins, originalMaxs );
 			if ( pm.StartedSolid ) return;
 
 			IsActive = false;

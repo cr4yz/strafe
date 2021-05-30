@@ -3,7 +3,7 @@ using Strafe.Timer;
 
 namespace Strafe.Ply
 {
-    public partial class StrafePlayer : BasePlayer
+    public partial class StrafePlayer : Player
     {
 
         private Replay _replay;
@@ -22,20 +22,20 @@ namespace Strafe.Ply
             _replay.Mode = ReplayMode.Record;
         }
 
-        public override void BuildInput(ClientInput input)
-        {
-            base.BuildInput(input);
+		public override void BuildInput(InputBuilder input)
+		{
+			base.BuildInput(input);
 
-            if(Input.Down(InputButton.Alt1))
-            {
-                input.ViewAngles = input.ViewAngles.WithYaw(input.ViewAngles.yaw + YawSpeed * Time.Delta);
-            }
+			if (input.Down(InputButton.Alt1))
+			{
+				input.ViewAngles = input.ViewAngles.WithYaw(input.ViewAngles.yaw + YawSpeed * Time.Delta);
+			}
 
-            if (Input.Down(InputButton.Alt2))
-            {
-                input.ViewAngles = input.ViewAngles.WithYaw(input.ViewAngles.yaw - YawSpeed * Time.Delta);
-            }
-        }
+			if (input.Down(InputButton.Alt2))
+			{
+				input.ViewAngles = input.ViewAngles.WithYaw(input.ViewAngles.yaw - YawSpeed * Time.Delta);
+			}
+		}
 
         public override void Respawn()
         {
@@ -78,8 +78,8 @@ namespace Strafe.Ply
         {
             using (Prediction.Off())
             {
-                var trBegin = new Transform(WorldPos.WithZ(WorldPos.z + 5), Rotation.Identity);
-                var trEnd = new Transform(WorldPos.WithZ(WorldPos.z - 10), Rotation.Identity);
+                var trBegin = new Transform(Position.WithZ(Position.z + 5), Rotation.Identity);
+                var trEnd = new Transform(Position.WithZ(Position.z - 10), Rotation.Identity);
                 var tr = Trace.Sweep(PhysicsBody, trBegin, trEnd)
                     .Ignore(this)
                     .Run();

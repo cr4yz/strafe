@@ -1,13 +1,5 @@
-using Strafe;
 using Strafe.Ply;
 using Sandbox;
-using Sandbox.UI;
-using Sandbox.UI.Construct;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Numerics;
-using System.Threading.Tasks;
 
 namespace Strafe.Weapons
 {
@@ -19,16 +11,16 @@ namespace Strafe.Weapons
 		public virtual int Bucket => 1;
 		public virtual int BucketWeight => 100;
 
-		[NetPredicted]
+		[Net, Predicted]
 		public int AmmoClip { get; set; }
 
-		[NetPredicted]
+		[Net, Predicted]
 		public TimeSince TimeSinceReload { get; set; }
 
-		[NetPredicted]
+		[Net, Predicted]
 		public bool IsReloading { get; set; }
 
-		[NetPredicted]
+		[Net, Predicted]
 		public TimeSince TimeSinceDeployed { get; set; }
 
 
@@ -38,13 +30,13 @@ namespace Strafe.Weapons
 		public int AvailableAmmo()
 		{
 			var owner = Owner as StrafePlayer;
-			if ( owner == null ) return 0;
-			return owner.AmmoCount( AmmoType );
+			if (owner == null) return 0;
+			return owner.AmmoCount(AmmoType);
 		}
 
-		public override void ActiveStart( Entity ent )
+		public override void ActiveStart(Entity ent)
 		{
-			base.ActiveStart( ent );
+			base.ActiveStart(ent);
 
 			TimeSinceDeployed = 0;
 		}
@@ -55,47 +47,49 @@ namespace Strafe.Weapons
 		{
 			base.Spawn();
 
-			SetModel( "weapons/rust_pistol/rust_pistol.vmdl" );
+			SetModel("weapons/rust_pistol/rust_pistol.vmdl");
 
 			PickupTrigger = new PickupTrigger();
 			PickupTrigger.Parent = this;
-			PickupTrigger.WorldPos = WorldPos;
+			PickupTrigger.Position = Position;
 		}
 
 		public override void Reload()
 		{
-			if ( IsReloading )
+			if (IsReloading)
 				return;
 
-			if ( AmmoClip >= ClipSize )
+			if (AmmoClip >= ClipSize)
 				return;
 
 			TimeSinceReload = 0;
 
-			if ( Owner is StrafePlayer player )
+			if (Owner is StrafePlayer player)
 			{
-				if ( player.AmmoCount( AmmoType ) <= 0 )
+				if (player.AmmoCount(AmmoType) <= 0)
 					return;
 
 				StartReloadEffects();
 			}
 
 			IsReloading = true;
-			Owner.SetAnimParam( "b_reload", true );
+			(Owner as AnimEntity).SetAnimBool("b_reload", true);
 			StartReloadEffects();
 		}
 
-		public override void OnPlayerControlTick( Player owner )
+		public override void Simulate(Client player)
 		{
-			if ( TimeSinceDeployed < 0.6f )
-				return;
-
-			if ( !IsReloading )
+			if (TimeSinceDeployed < 0.6f)
 			{
-				base.OnPlayerControlTick( owner );
+				return;
 			}
 
-			if ( IsReloading && TimeSinceReload > ReloadTime )
+			if (!IsReloading)
+			{
+				base.Simulate(player);
+			}
+
+			if (IsReloading && TimeSinceReload > ReloadTime)
 			{
 				OnReloadFinish();
 			}
@@ -105,10 +99,10 @@ namespace Strafe.Weapons
 		{
 			IsReloading = false;
 
-			if ( Owner is StrafePlayer player )
+			if (Owner is StrafePlayer player)
 			{
-				var ammo = player.TakeAmmo( AmmoType, ClipSize - AmmoClip );
-				if ( ammo == 0 )
+				var ammo = player.TakeAmmo(AmmoType, ClipSize - AmmoClip);
+				if (ammo == 0)
 					return;
 
 				AmmoClip += ammo;
@@ -118,7 +112,7 @@ namespace Strafe.Weapons
 		[ClientRpc]
 		public virtual void StartReloadEffects()
 		{
-			ViewModelEntity?.SetAnimParam( "reload", true );
+			ViewModelEntity?.SetAnimBool("reload", true);
 
 			// TODO - player third person model reload
 		}
@@ -137,24 +131,24 @@ namespace Strafe.Weapons
 			// ShootBullet is coded in a way where we can have bullets pass through shit
 			// or bounce off shit, in which case it'll return multiple results
 			//
-			foreach ( var tr in TraceBullet( Owner.EyePos, Owner.EyePos + Owner.EyeRot.Forward * 5000 ) )
+			foreach (var tr in TraceBullet(Owner.EyePos, Owner.EyePos + Owner.EyeRot.Forward * 5000))
 			{
-				tr.Surface.DoBulletImpact( tr );
+				tr.Surface.DoBulletImpact(tr);
 
-				if ( !IsServer ) continue;
-				if ( !tr.Entity.IsValid() ) continue;
+				if (!IsServer) continue;
+				if (!tr.Entity.IsValid()) continue;
 
 				//
 				// We turn predictiuon off for this, so aany exploding effects don't get culled etc
 				//
-				using ( Prediction.Off() )
+				using (Prediction.Off())
 				{
-					var damage = DamageInfo.FromBullet( tr.EndPos, Owner.EyeRot.Forward * 100, 15 )
-						.UsingTraceResult( tr )
-						.WithAttacker( Owner )
-						.WithWeapon( this );
+					var damage = DamageInfo.FromBullet(tr.EndPos, Owner.EyeRot.Forward * 100, 15)
+						.UsingTraceResult(tr)
+						.WithAttacker(Owner)
+						.WithWeapon(this);
 
-					tr.Entity.TakeDamage( damage );
+					tr.Entity.TakeDamage(damage);
 				}
 			}
 		}
@@ -164,21 +158,21 @@ namespace Strafe.Weapons
 		{
 			Host.AssertClient();
 
-			Particles.Create( "particles/pistol_muzzleflash.vpcf", EffectEntity, "muzzle" );
+			Particles.Create("particles/pistol_muzzleflash.vpcf", EffectEntity, "muzzle");
 
-			if ( Owner == Player.Local )
+			if (Owner == Local.Pawn)
 			{
 				new Sandbox.ScreenShake.Perlin();
 			}
 
-			ViewModelEntity?.SetAnimParam( "fire", true );
-			CrosshairPanel?.OnEvent( "fire" );
+			ViewModelEntity?.SetAnimBool("fire", true);
+			CrosshairPanel?.OnEvent("fire");
 		}
 
 		/// <summary>
 		/// Shoot a single bullet
 		/// </summary>
-		public virtual void ShootBullet( float spread, float force, float damage, float bulletSize )
+		public virtual void ShootBullet(float spread, float force, float damage, float bulletSize)
 		{
 			var forward = Owner.EyeRot.Forward;
 			forward += (Vector3.Random + Vector3.Random + Vector3.Random + Vector3.Random) * spread * 0.25f;
@@ -188,31 +182,31 @@ namespace Strafe.Weapons
 			// ShootBullet is coded in a way where we can have bullets pass through shit
 			// or bounce off shit, in which case it'll return multiple results
 			//
-			foreach ( var tr in TraceBullet( Owner.EyePos, Owner.EyePos + forward * 5000, bulletSize ) )
+			foreach (var tr in TraceBullet(Owner.EyePos, Owner.EyePos + forward * 5000, bulletSize))
 			{
-				tr.Surface.DoBulletImpact( tr );
+				tr.Surface.DoBulletImpact(tr);
 
-				if ( !IsServer ) continue;
-				if ( !tr.Entity.IsValid() ) continue;
+				if (!IsServer) continue;
+				if (!tr.Entity.IsValid()) continue;
 
 				//
 				// We turn predictiuon off for this, so any exploding effects don't get culled etc
 				//
-				using ( Prediction.Off() )
+				using (Prediction.Off())
 				{
-					var damageInfo = DamageInfo.FromBullet( tr.EndPos, forward * 100 * force, damage )
-						.UsingTraceResult( tr )
-						.WithAttacker( Owner )
-						.WithWeapon( this );
+					var damageInfo = DamageInfo.FromBullet(tr.EndPos, forward * 100 * force, damage)
+						.UsingTraceResult(tr)
+						.WithAttacker(Owner)
+						.WithWeapon(this);
 
-					tr.Entity.TakeDamage( damageInfo );
+					tr.Entity.TakeDamage(damageInfo);
 				}
 			}
 		}
 
-		public bool TakeAmmo( int amount )
+		public bool TakeAmmo(int amount)
 		{
-			if ( AmmoClip < amount )
+			if (AmmoClip < amount)
 				return false;
 
 			AmmoClip -= amount;
@@ -229,19 +223,22 @@ namespace Strafe.Weapons
 		{
 			Host.AssertClient();
 
-			if ( string.IsNullOrEmpty( ViewModelPath ) )
+			if (string.IsNullOrEmpty(ViewModelPath))
 				return;
 
 			ViewModelEntity = new StrafeViewModel();
-			ViewModelEntity.WorldPos = WorldPos;
+			ViewModelEntity.Position = Position;
 			ViewModelEntity.Owner = Owner;
 			ViewModelEntity.EnableViewmodelRendering = true;
-			ViewModelEntity.SetModel( ViewModelPath );
+			ViewModelEntity.SetModel(ViewModelPath);
 		}
 
 		public override void CreateHudElements()
 		{
-			if ( Hud.CurrentPanel == null ) return;
+			if (Local.Hud == null)
+			{
+				return;
+			}
 
 			//CrosshairPanel = new Crosshair();
 			//CrosshairPanel.Parent = Hud.CurrentPanel;
@@ -250,25 +247,25 @@ namespace Strafe.Weapons
 
 		public bool IsUsable()
 		{
-			if ( AmmoClip > 0 ) return true;
+			if (AmmoClip > 0) return true;
 			return AvailableAmmo() > 0;
 		}
 
-		public override void OnCarryStart( Entity carrier )
+		public override void OnCarryStart(Entity carrier)
 		{
-			base.OnCarryStart( carrier );
+			base.OnCarryStart(carrier);
 
-			if ( PickupTrigger.IsValid() )
+			if (PickupTrigger.IsValid())
 			{
 				PickupTrigger.EnableTouch = false;
 			}
 		}
 
-		public override void OnCarryDrop( Entity dropper )
+		public override void OnCarryDrop(Entity dropper)
 		{
-			base.OnCarryDrop( dropper );
+			base.OnCarryDrop(dropper);
 
-			if ( PickupTrigger.IsValid() )
+			if (PickupTrigger.IsValid())
 			{
 				PickupTrigger.EnableTouch = true;
 			}

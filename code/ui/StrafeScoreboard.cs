@@ -19,20 +19,20 @@ namespace Strafe.UI
 
 			Canvas = Add.Panel("canvas");
 
-			foreach (var player in Player.All)
+			foreach (var client in Client.All)
 			{
-				AddPlayer(player as StrafePlayer);
+				AddPlayer(client);
 			}
 
-            (Game.Current as StrafeGame).OnPlayerJoined += ply => AddPlayer(ply);
-			(Game.Current as StrafeGame).OnPlayerDisconnected += ply => RemovePlayer(ply);
+            (Game.Current as StrafeGame).OnPlayerJoined += client => AddPlayer(client);
+			(Game.Current as StrafeGame).OnPlayerDisconnected += client => RemovePlayer(client);
 		}
 
         public override void Tick()
 		{
 			base.Tick();
 
-			var open = Player.Local?.Input.Down(InputButton.Score) ?? false;
+			var open = Local.Pawn?.Input?.Down(InputButton.Score) ?? false;
 
 			SetClass("open", open);
 
@@ -58,17 +58,17 @@ namespace Strafe.UI
 			Header.Add.Label("Ping", "ping");
 		}
 
-		private void AddPlayer(StrafePlayer player)
+		private void AddPlayer(Client client)
 		{
 			var p = Canvas.AddChild<T>();
-			p.Player = player;
+			p.Client = client;
 		}
 
-		private void RemovePlayer(StrafePlayer player)
+		private void RemovePlayer(Client client)
 		{
 			foreach(var child in Canvas.Children)
             {
-				if(child is StrafeScoreboardEntry ss && ss.Player == player)
+				if(child is StrafeScoreboardEntry ss && ss.Client == client)
                 {
 					child.Delete();
                 }

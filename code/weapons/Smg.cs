@@ -33,7 +33,7 @@ namespace Strafe.Weapons
 				return;
 			}
 
-			Owner.SetAnimParam( "b_attack", true );
+			(Owner as AnimEntity).SetAnimBool("b_attack", true);
 
 			//
 			// Tell the clients to play the shoot effects
@@ -61,7 +61,7 @@ namespace Strafe.Weapons
 			Particles.Create( "particles/pistol_muzzleflash.vpcf", EffectEntity, "muzzle" );
 			Particles.Create( "particles/pistol_ejectbrass.vpcf", EffectEntity, "ejection_point" );
 
-			if ( Owner == Player.Local )
+			if ( Owner == Local.Pawn )
 			{
 				new Sandbox.ScreenShake.Perlin( 0.5f, 4.0f, 1.0f, 0.5f );
 			}
@@ -70,10 +70,12 @@ namespace Strafe.Weapons
 			CrosshairPanel?.OnEvent( "fire" );
 		}
 
-		public override void TickPlayerAnimator( PlayerAnimator anim )
+		public override void SimulateAnimator(PawnAnimator anim)
 		{
-			anim.SetParam( "holdtype", 2 ); // TODO this is shit
-			anim.SetParam( "aimat_weight", 1.0f );
+			base.SimulateAnimator(anim);
+
+			anim.SetParam("holdtype", 2); // TODO this is shit
+			anim.SetParam("aimat_weight", 1.0f);
 		}
 
 	}

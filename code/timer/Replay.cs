@@ -2,6 +2,7 @@
 using Strafe.Ply;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Strafe.Timer
 {
@@ -83,21 +84,25 @@ namespace Strafe.Timer
         {
             var frame = new ReplayFrame()
             {
-                Position = Entity.WorldPos,
+                Position = Entity.Position,
                 Angles = Entity.WorldAng,
                 Velocity = Entity.Velocity
             };
-            if(Entity is StrafePlayer player)
+
+			var cl = Client.All.FirstOrDefault(x => x.Pawn == Entity);
+
+            if(cl is StrafePlayer player)
             {
-                frame.Buttons = GetButtons(player);
+                frame.Buttons = GetButtons(cl);
                 frame.JustJumped = (player.Controller as StrafeWalkController).JustJumped;
                 frame.Grounded = player.Controller.GroundEntity != null;
             }
+
             _frames.Add(frame);
         }
 
         private static Array _inputBtns;
-        private InputButton GetButtons(Player player)
+        private InputButton GetButtons(Client client)
         {
             var result = InputButton.Alt1; // InputButton.None maybe
 
@@ -108,7 +113,7 @@ namespace Strafe.Timer
 
             foreach(InputButton btn in _inputBtns)
             {
-                if(player.Input.Down(btn))
+                if(client.Input.Down(btn))
                 {
                     result |= btn;
                 }

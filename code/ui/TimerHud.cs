@@ -29,7 +29,7 @@ namespace Strafe.UI
 		{
 			base.Tick();
 
-			if(Player.Local is not StrafePlayer player || player.Controller == null)
+			if(Local.Pawn is not StrafePlayer player || player.Controller == null)
             {
 				return;
             }

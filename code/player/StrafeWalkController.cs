@@ -1,9 +1,5 @@
 ﻿using Sandbox;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Strafe.Ply
 {
@@ -80,8 +76,8 @@ namespace Strafe.Ply
 		{
 			var girth = BodyGirth * 0.5f;
 
-			var mins = new Vector3( -girth, -girth, 0 ) * Player.WorldScale;
-			var maxs = new Vector3( +girth, +girth, BodyHeight ) * Player.WorldScale;
+			var mins = new Vector3( -girth, -girth, 0 ) * Pawn.Scale;
+			var maxs = new Vector3( +girth, +girth, BodyHeight ) * Pawn.Scale;
 
 			Duck.UpdateBBox( ref mins, ref maxs );
 
@@ -90,14 +86,14 @@ namespace Strafe.Ply
 
 		protected float SurfaceFriction;
 
-		public override void Tick()
+		public override void Simulate()
 		{
 			JustJumped = false;
 
-			ViewOffset = Vector3.Up * (EyeHeight * Player.WorldScale);
+			EyePosLocal = Vector3.Up * (EyeHeight * Pawn.Scale);
 			UpdateBBox();
 
-			ViewOffset += TraceOffset;
+			EyePosLocal += TraceOffset;
 
 			RestoreGroundPos();
 
@@ -123,7 +119,7 @@ namespace Strafe.Ply
 
 			// RunLadderMode
 
-			Swimming = Player.WaterLevel.Fraction > 0.6f;
+			Swimming = Pawn.WaterLevel.Fraction > 0.6f;
 
 			//
 			// Start Gravity
@@ -177,8 +173,8 @@ namespace Strafe.Ply
 			//
 			WishVelocity = new Vector3( Input.Forward, Input.Left, 0 );
 			var inSpeed = WishVelocity.Length.Clamp( 0, 1 );
-			WishVelocity *= Input.Rot;
-
+			WishVelocity *= Input.Rotation;
+			
 			if ( !Swimming )
 			{
 				WishVelocity = WishVelocity.WithZ( 0 );
@@ -228,13 +224,13 @@ namespace Strafe.Ply
 
 			if ( Debug )
 			{
-				DebugOverlay.Box( Pos + TraceOffset, mins, maxs, Color.Red );
-				DebugOverlay.Box( Pos, mins, maxs, Color.Blue );
+				DebugOverlay.Box( Position + TraceOffset, mins, maxs, Color.Red );
+				DebugOverlay.Box(Position, mins, maxs, Color.Blue );
 
 				var lineOffset = 0;
 				if ( Host.IsServer ) lineOffset = 10;
 
-				DebugOverlay.ScreenText( lineOffset + 0, $"             Pos: {Pos}" );
+				DebugOverlay.ScreenText( lineOffset + 0, $"             Pos: {Position}" );
 				DebugOverlay.ScreenText( lineOffset + 1, $"             Vel: {Velocity}" );
 				DebugOverlay.ScreenText( lineOffset + 2, $"    BaseVelocity: {BaseVelocity}" );
 				DebugOverlay.ScreenText( lineOffset + 3, $"    GroundEntity: {GroundEntity} [{GroundEntity?.Velocity}]" );
@@ -287,13 +283,13 @@ namespace Strafe.Ply
 				}
 
 				// first try just moving to the destination	
-				var dest = (Pos + Velocity * Time.Delta).WithZ( Pos.z );
+				var dest = (Position + Velocity * Time.Delta).WithZ(Position.z );
 
-				var pm = TraceBBox( Pos, dest );
+				var pm = TraceBBox(Position, dest );
 
 				if ( pm.Fraction == 1 )
 				{
-					Pos = pm.EndPos;
+					Position = pm.EndPos;
 					StayOnGround();
 					return;
 				}
@@ -312,7 +308,7 @@ namespace Strafe.Ply
 
 		private void StepMove()
 		{
-			var vecPos = Pos;
+			var vecPos = Position;
 			var vecVel = Velocity;
 
 			//
@@ -324,25 +320,25 @@ namespace Strafe.Ply
 			// mv now contains where they ended up if they tried to walk straight there.
 			// Save those results for use later.
 			//	
-			var vecDownPos = Pos;
+			var vecDownPos = Position;
 			var vecDownVel = Velocity;
 
 			//
 			// Reset original values to try some other things.
 			//
-			Pos = vecPos;
+			Position = vecPos;
 			Velocity = vecVel;
 
 			// Only step up as high as we have headroom to do so.	
-			var trace = TraceBBox( Pos, Pos + Vector3.Up * (StepSize + DistEpsilon) );
+			var trace = TraceBBox(Position, Position + Vector3.Up * (StepSize + DistEpsilon) );
 			if ( !trace.StartedSolid )
 			{
-				Pos = trace.EndPos;
+				Position = trace.EndPos;
 			}
 			TryPlayerMove();
 
 
-			trace = TraceBBox( Pos, Pos + Vector3.Down * (StepSize + DistEpsilon * 2) );
+			trace = TraceBBox(Position, Position + Vector3.Down * (StepSize + DistEpsilon * 2) );
 			if ( trace.Normal.z < GroundNormalZ )
 			{
 				if ( Debug )
@@ -350,7 +346,7 @@ namespace Strafe.Ply
 					DebugOverlay.Text( vecDownPos, "step down", 2.0f );
 				}
 
-				Pos = vecDownPos;
+				Position = vecDownPos;
 				Velocity = vecDownVel.WithZ( 0 );
 				// out step height
 				return;
@@ -358,16 +354,16 @@ namespace Strafe.Ply
 
 			if ( !trace.StartedSolid )
 			{
-				Pos = trace.EndPos;
+				Position = trace.EndPos;
 			}
 
-			var vecUpPos = Pos;
+			var vecUpPos = Position;
 
 			float flDownDist = (vecDownPos.x - vecPos.x) * (vecDownPos.x - vecPos.x) + (vecDownPos.y - vecPos.y) * (vecDownPos.y - vecPos.y);
 			float flUpDist = (vecUpPos.x - vecPos.x) * (vecUpPos.x - vecPos.x) + (vecUpPos.y - vecPos.y) * (vecUpPos.y - vecPos.y);
 			if ( flDownDist > flUpDist )
 			{
-				Pos = vecDownPos;
+				Position = vecDownPos;
 				Velocity = vecDownVel;
 			}
 			else
@@ -530,7 +526,7 @@ namespace Strafe.Ply
 			//mv->m_nOldButtons |= IN_JUMP;
 
 			JustJumped = true;
-			(Player as StrafePlayer).PlayFootstep();
+			(Pawn as StrafePlayer).PlayFootstep();
 
 		}
 
@@ -583,9 +579,9 @@ namespace Strafe.Ply
 
 				// Assume we can move all the way from the current origin to the
 				//  end point.
-				var end = Pos + Velocity * timeLeft;
+				var end = Position + Velocity * timeLeft;
 
-				var pm = TraceBBox( Pos, end );
+				var pm = TraceBBox(Position, end );
 
 				allFraction += pm.Fraction;
 
@@ -594,7 +590,7 @@ namespace Strafe.Ply
 				{
 					// Note: Skipping terrain double check around hack test
 
-					Pos = pm.EndPos;
+					Position = pm.EndPos;
 					original_velocity = Velocity;
 					numplanes = 0;
 				}
@@ -724,8 +720,8 @@ namespace Strafe.Ply
 			// water on each call, and the converse case will correct itself if called twice.
 			//CheckWater();
 
-			var point = Pos - Vector3.Up * 2;
-			var vBumpOrigin = Pos;
+			var point = Position - Vector3.Up * 2;
+			var vBumpOrigin = Position;
 
 			//
 			//  Shooting up really fast.  Definitely not on ground trimed until ladder shit
@@ -769,7 +765,7 @@ namespace Strafe.Ply
 
 			if ( bMoveToEndPos && !pm.StartedSolid && pm.Fraction > 0.0f && pm.Fraction < 1.0f )
 			{
-				Pos = pm.EndPos;
+				Position = pm.EndPos;
 			}
 
 		}
@@ -839,11 +835,11 @@ namespace Strafe.Ply
 		/// </summary>
 		public virtual void StayOnGround()
 		{
-			var start = Pos + Vector3.Up * 2;
-			var end = Pos + Vector3.Down * StepSize;
+			var start = Position + Vector3.Up * 2;
+			var end = Position + Vector3.Down * StepSize;
 
 			// See how far up we can go without getting stuck
-			var trace = TraceBBox( Pos, start );
+			var trace = TraceBBox(Position, start );
 			start = trace.EndPos;
 
 			// Now trace down from a known safe position
@@ -858,7 +854,7 @@ namespace Strafe.Ply
 			// float flDelta = fabs( mv->GetAbsOrigin().z - trace.m_vEndPos.z );
 			// if ( flDelta > 0.5f * DIST_EPSILON )
 
-			Pos = trace.EndPos;
+			Position = trace.EndPos;
 		}
 
 		void RestoreGroundPos()

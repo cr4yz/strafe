@@ -2,77 +2,73 @@ using Sandbox;
 using Strafe.UI;
 using Strafe.Ply;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Strafe.Entities;
 
 namespace Strafe
 {
-    [Library("strafe", Title = "Strafe")]
-    partial class StrafeGame : Game
-    {
+	[Library("strafe", Title = "Strafe")]
+	partial class StrafeGame : Game
+	{
 
-		public event Action<StrafePlayer> OnPlayerJoined;
-		public event Action<StrafePlayer> OnPlayerDisconnected;
+		public event Action<Client> OnPlayerJoined;
+		public event Action<Client> OnPlayerDisconnected;
 
 		public StrafeGame()
-        {
-            if (IsServer)
+		{
+			if (IsServer)
 			{
 				new StrafeHud();
 			}
-        }
-
-		public override Player CreatePlayer() => new StrafePlayer();
-
-        public override void PlayerJoined(Player player)
-        {
-            base.PlayerJoined(player);
-
-			OnPlayerJoined?.Invoke(player as StrafePlayer);
-        }
-
-        public override void PlayerDisconnected(Player player, NetworkDisconnectionReason reason)
-        {
-            base.PlayerDisconnected(player, reason);
-
-			OnPlayerDisconnected?.Invoke(player as StrafePlayer);
 		}
 
-        public static void OnChatCommand(Player player, string command)
+		public override void ClientJoined(Client cl)
 		{
-			if ( !Game.Current.IsAuthority )
+			base.ClientJoined(cl);
+
+			var player = new StrafePlayer();
+			player.Respawn();
+
+			cl.Pawn = player;
+
+			OnPlayerJoined?.Invoke(cl);
+		}
+
+		public override void ClientDisconnect(Client cl, NetworkDisconnectionReason reason)
+		{
+			base.ClientDisconnect(cl, reason);
+
+			OnPlayerDisconnected?.Invoke(cl);
+		}
+
+		public static void OnChatCommand(Client cl, string command)
+		{
+			if (!Game.Current.IsAuthority)
 			{
 				return;
 			}
 
-			var cmd = command.Remove( 0, 1 );
-			switch ( cmd.ToLower() )
+			var cmd = command.Remove(0, 1);
+			switch (cmd.ToLower())
 			{
 				case "respawn":
 				case "r":
 				case "spawn":
-					player.Respawn();
-					break;
-				case "rall":
-					foreach(var p in Player.All )
+					if (cl.Pawn is Player pl)
 					{
-						p.Respawn();
+						pl.Respawn();
 					}
 					break;
 				case "removebots":
-					foreach(var ent in Entity.All)
-                    {
-						if(ent is ReplayBot && ent.IsValid())
-                        {
+					foreach (var ent in Entity.All)
+					{
+						if (ent is ReplayBot && ent.IsValid())
+						{
 							ent.Delete();
-                        }
-                    }
+						}
+					}
 					break;
 			}
 		}
 
-    }
+	}
 }

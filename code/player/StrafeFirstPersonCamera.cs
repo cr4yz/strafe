@@ -2,7 +2,7 @@
 
 namespace Strafe.Ply
 {
-	public class StrafeFirstPersonCamera : BaseCamera
+	public class StrafeFirstPersonCamera : Camera
 	{
 
 		public override void Activated()
@@ -19,14 +19,14 @@ namespace Strafe.Ply
 
 		private void MoveToTarget()
         {
-			Viewer = Player.Local;
+			Viewer = Local.Pawn;
 
-			if (Player.Local == null)
+			if (Viewer == null)
             {
 				return;
             }
 
-			if (Player.Local is Player player)
+			if (Viewer is Player player)
             {
 				Pos = player.EyePos;
 				Rot = player.EyeRot;

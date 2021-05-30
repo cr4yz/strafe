@@ -3,11 +3,12 @@ using Strafe.Entities;
 using Strafe.UI;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace Strafe.Ply
 {
-	public enum TimerState 
+	public enum TimerState
 	{
 		InStartZone,
 		Running,
@@ -30,11 +31,11 @@ namespace Strafe.Ply
 		[Net]
 		public int TimerStage { get; set; }
 
-		public string FormattedTimerTime => TimeSpan.FromSeconds( TimerTime ).ToString( @"mm\:ss\.fff" );
+		public string FormattedTimerTime => TimeSpan.FromSeconds(TimerTime).ToString(@"mm\:ss\.fff");
 		public int HorizontalSpeed
-        {
+		{
 			get => (int)Velocity.WithZ(0).Length;
-			set 
+			set
 			{
 				var v = Velocity.WithZ(0).ClampLength(value);
 				v.z = Velocity.z;
@@ -47,14 +48,14 @@ namespace Strafe.Ply
 		private HashSet<TriggerTimerCp> _touchedCheckpoints = new HashSet<TriggerTimerCp>();
 
 		public void StartTimer()
-        {
+		{
 			_replay.Clear();
 
 			TimerState = TimerState.Running;
 			TimerTime = 0;
 			TimerJumps = 0;
 			TimerStrafes = 0;
-            TimerCheckpoint = 0;
+			TimerCheckpoint = 0;
 			TimerStage = 0;
 
 			_touchedCheckpoints.Clear();
@@ -65,61 +66,80 @@ namespace Strafe.Ply
 			{
 				HorizontalSpeed = 280;
 			}
-        }
+		}
 
 		public void FinishTimer()
-        {
-            if (!IsServer
+		{
+			if (!IsServer
 				|| TimerState != TimerState.Running)
-            {
+			{
 				return;
-            }
+			}
 
 			TimerState = TimerState.Ended;
 
 			ReplayBot.WithClonedReplay(_replay);
 			_replay.Clear();
 
-			StrafeChatBox.AddChatEntry(All, Name, $"Map completed in {FormattedTimerTime}s", $"avatar:{SteamId}");
+			var cl = Client.All.FirstOrDefault(x => x.Pawn == this);
+			if (cl == null)
+			{
+				return;
+			}
+
+			StrafeChatBox.AddChatEntry(To.Everyone, cl.Name, $"Map completed in {FormattedTimerTime}s", $"avatar:{cl.SteamId}");
 		}
 
 		public void SetCheckpoint(TriggerTimerCp cp)
-        {
-			if(!IsServer
+		{
+			if (!IsServer
 				|| TimerState != TimerState.Running
 				|| _touchedCheckpoints.Contains(cp))
-            {
+			{
 				return;
-            }
+			}
 
 			_touchedCheckpoints.Add(cp);
 			TimerCheckpoint++;
 
-			StrafeChatBox.AddChatEntry(this, Name, $"Checkpoint #{TimerCheckpoint} in {FormattedTimerTime}s", $"avatar:{SteamId}");
-		}
-
-		[Event("server.tick")]
-		private void TickTimer()
-		{
-			if ( TimerState != TimerState.Running )
+			var cl = Client.All.FirstOrDefault(x => x.Pawn == this);
+			if (cl == null)
 			{
 				return;
 			}
 
-			if(DevController != null)
-            {
+			StrafeChatBox.AddChatEntry(To.Single(cl), cl.Name, $"Checkpoint #{TimerCheckpoint} in {FormattedTimerTime}s", $"avatar:{cl.SteamId}");
+		}
+
+		[Event.Tick]
+		private void TickTimer()
+		{
+			if (IsClient
+				|| TimerState != TimerState.Running)
+			{
+				return;
+			}
+
+			if (DevController != null)
+			{
 				TimerState = TimerState.Ended;
 				return;
-            }
+			}
+
+			var cl = Client.All.FirstOrDefault(x => x.Pawn == this);
+
+			if (cl is not StrafePlayer)
+			{
+			}
 
 			var walk = Controller as StrafeWalkController;
-			if(walk.JustJumped)
+			if (walk.JustJumped)
 			{
 				TimerJumps++;
 			}
 
-			var isLeft = Input.Down(InputButton.Left);
-			var isRight = Input.Down(InputButton.Right);
+			var isLeft = cl.Input.Down(InputButton.Left);
+			var isRight = cl.Input.Down(InputButton.Right);
 
 			if ((isLeft && !_wasLeft) || (isRight && !_wasRight))
 			{

@@ -1,17 +1,13 @@
-﻿
-using Sandbox;
-using Sandbox.Hooks;
+﻿using Sandbox;
 using Sandbox.UI;
 using Sandbox.UI.Construct;
 using Strafe.Ply;
-using System;
-using System.Collections.Generic;
 
 namespace Strafe.UI
 {
 	public partial class StrafeScoreboardEntry : Panel
 	{
-		public StrafePlayer Player;
+		public Client Client;
 
 		public Label PlayerName;
 		public Label Timer;
@@ -30,15 +26,21 @@ namespace Strafe.UI
         {
 			base.Tick();
 
-			var timerText = Player.TimerState == TimerState.Running
-				? Player.FormattedTimerTime
-				: Player.TimerState.ToString();
+			var sp = Client.Pawn as StrafePlayer;
+			if(sp == null)
+			{
+				return;
+			}
 
-			PlayerName.Text = Player.Name;
+			var timerText = sp.TimerState == TimerState.Running
+				? sp.FormattedTimerTime
+				: sp.TimerState.ToString();
+
+			PlayerName.Text = Client.Name;
 			Timer.Text = timerText;
 			Ping.Text = "n/a";
 
-			SetClass("me", Player.IsLocalPlayer);
+			SetClass("me", sp.IsLocalPawn);
 		}
 
 	}

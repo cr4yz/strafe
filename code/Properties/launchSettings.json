@@ -1,0 +1,9 @@
+{
+  "profiles": {
+    "strafe": {
+      "commandName": "Executable",
+      "executablePath": "D:\\Gemes\\steamapps\\common\\sbox\\sbox.exe",
+      "commandLineArgs": "\u002Bdeveloper \u002Bsw -noassert -tools"
+    }
+  }
+}
