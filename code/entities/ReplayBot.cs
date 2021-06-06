@@ -22,13 +22,13 @@ namespace Strafe.Entities
             }
             Replay.Mode = ReplayMode.Playback;
             Replay.Tick();
-            WorldPos = Replay.CurrentFrame.Position;
+            Position = Replay.CurrentFrame.Position;
             WorldAng = Replay.CurrentFrame.Angles;
 
             DoWalk(Replay.CurrentFrame);
-            SetAnimParam("b_jump", Replay.CurrentFrame.JustJumped);
-            SetAnimParam("b_grounded", Replay.CurrentFrame.Grounded);
-            SetAnimParam("b_ducked", Replay.CurrentFrame.Buttons.HasFlag(InputButton.Duck));
+            SetAnimBool("b_jump", Replay.CurrentFrame.JustJumped);
+			SetAnimBool("b_grounded", Replay.CurrentFrame.Grounded);
+			SetAnimBool("b_ducked", Replay.CurrentFrame.Buttons.HasFlag(InputButton.Duck));
         }
 
         public override void Spawn()
@@ -42,7 +42,7 @@ namespace Strafe.Entities
             var spawn = Entity.All.FirstOrDefault(x => x.EntityName == "spawn");
             if(spawn != null)
             {
-                WorldPos = spawn.WorldPos;
+                Position = spawn.Position;
                 WorldAng = spawn.WorldAng;
             }
         }
@@ -62,19 +62,19 @@ namespace Strafe.Entities
 
         void DoWalk(ReplayFrame frame)
         {
-            SetAnimParam("walkspeed_scale", 2.0f / 260.0f);
-            SetAnimParam("runspeed_scale", 2.0f / 260.0f);
-            SetAnimParam("duckspeed_scale", 2.0f / 80.0f);
+            SetAnimFloat("walkspeed_scale", 2.0f / 260.0f);
+			SetAnimFloat("runspeed_scale", 2.0f / 260.0f);
+			SetAnimFloat("duckspeed_scale", 2.0f / 80.0f);
 
             var rot = Rotation.From(frame.Angles);
             var moveDir = frame.Velocity.Normal * 100.0f;
             var forward = rot.Forward.Dot(moveDir);
             var sideward = rot.Left.Dot(moveDir);
-            var speedScale = WorldScale;
+            var speedScale = Scale;
 
-            SetAnimParam("forward", forward);
-            SetAnimParam("sideward", sideward);
-            SetAnimParam("wishspeed", speedScale > 0.0f ? frame.Velocity.Length / speedScale : 0.0f);
+			SetAnimFloat("forward", forward);
+			SetAnimFloat("sideward", sideward);
+			SetAnimFloat("wishspeed", speedScale > 0.0f ? frame.Velocity.Length / speedScale : 0.0f);
         }
 
     }

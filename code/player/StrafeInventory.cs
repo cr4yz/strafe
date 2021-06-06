@@ -34,7 +34,7 @@ namespace Strafe.Ply
 
 					if ( notices )
 					{
-						Sound.FromWorld( "dm.pickup_ammo", ent.WorldPos );
+						Sound.FromWorld( "dm.pickup_ammo", ent.Position );
 						//PickupFeed.OnPickup( player, $"+{ammo} {ammoType}" );
 					}
 				}
@@ -48,7 +48,7 @@ namespace Strafe.Ply
 
 			if ( weapon != null && notices )
 			{
-				Sound.FromWorld( "dm.pickup_weapon", ent.WorldPos );
+				Sound.FromWorld( "dm.pickup_weapon", ent.Position);
 				//PickupFeed.OnPickup( player, $"{ent.ClassInfo.Title}" ); 
 			}
 
