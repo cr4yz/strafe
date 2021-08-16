@@ -7,12 +7,12 @@ namespace Strafe.Ply
     {
 
         private Replay _replay;
-        private StrafeWalkController _controller;
+        //private StrafeWalkController _controller;
         private TimeSince _timeSinceLastFootstep = 0;
 
         public bool SuppressPickupNotices { get; private set; }
 
-        [UserVar("cl_yawspeed", Saved = true)]
+        [ClientVar("cl_yawspeed", Saved = true)]
         public static int YawSpeed { get; set; } = 160;
         
         public StrafePlayer()
@@ -20,7 +20,7 @@ namespace Strafe.Ply
             Inventory = new StrafeInventory(this);
             _replay = new Replay(this);
             _replay.Mode = ReplayMode.Record;
-        }
+		}
 
 		public override void BuildInput(InputBuilder input)
 		{

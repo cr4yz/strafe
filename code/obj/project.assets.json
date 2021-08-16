@@ -53,8 +53,8 @@
         "net5.0": {
           "targetAlias": "net5.0",
           "projectReferences": {
-            "D:\\Gemes\\steamapps\\common\\sbox\\addons\\base\\code\\base.csproj": {
-              "projectPath": "D:\\Gemes\\steamapps\\common\\sbox\\addons\\base\\code\\base.csproj"
+            "D:\\Gemes\\steamapps\\common\\sbox\\Addons\\base\\code\\base.csproj": {
+              "projectPath": "D:\\Gemes\\steamapps\\common\\sbox\\Addons\\base\\code\\base.csproj"
             }
           }
         }

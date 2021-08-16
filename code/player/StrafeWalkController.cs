@@ -32,7 +32,7 @@ namespace Strafe.Ply
 		public float BodyHeight { get; set; } = 72.0f;
 		public float EyeHeight { get; set; } = 64.0f;
 		public float Gravity { get; set; } = 800.0f;
-		public float AirControl { get; set; } = 30.0f;
+		public float AirControl { get; set; } = 42.0f;
 		public bool Swimming { get; set; } = false;
 		public bool AutoJump { get; set; } = true;
 

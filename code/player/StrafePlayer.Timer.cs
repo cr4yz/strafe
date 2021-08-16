@@ -138,8 +138,8 @@ namespace Strafe.Ply
 				TimerJumps++;
 			}
 
-			var isLeft = cl.Input.Down(InputButton.Left);
-			var isRight = cl.Input.Down(InputButton.Right);
+			var isLeft = Input.Down(InputButton.Left);
+			var isRight = Input.Down(InputButton.Right);
 
 			if ((isLeft && !_wasLeft) || (isRight && !_wasRight))
 			{

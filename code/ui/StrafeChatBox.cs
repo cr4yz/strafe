@@ -1,12 +1,8 @@
-﻿using Strafe.Ply;
-using Sandbox;
+﻿using Sandbox;
 using Sandbox.UI;
 using Sandbox.UI.Construct;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Strafe.UI
 {
@@ -29,8 +25,8 @@ namespace Strafe.UI
 			Canvas = Add.Panel("chat_canvas");
 
 			Input = Add.TextEntry("");
-			Input.AddEvent("onsubmit", () => Submit());
-			Input.AddEvent("onblur", () => Close());
+			Input.AddEventListener("onsubmit", () => Submit());
+			Input.AddEventListener("onblur", () => Close());
 			Input.AcceptsFocus = true;
 			Input.AllowEmojiReplace = true;
 

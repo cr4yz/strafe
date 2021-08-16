@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\Gemes\\steamapps\\common\\sbox\\addons\\strafe\\code\\strafe.csproj": {}
+    "D:\\Gemes\\steamapps\\common\\sbox\\Addons\\strafe\\code\\strafe.csproj": {}
   },
   "projects": {
-    "D:\\Gemes\\steamapps\\common\\sbox\\addons\\base\\code\\base.csproj": {
+    "D:\\Gemes\\steamapps\\common\\sbox\\Addons\\base\\code\\base.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\Gemes\\steamapps\\common\\sbox\\addons\\base\\code\\base.csproj",
+        "projectUniqueName": "D:\\Gemes\\steamapps\\common\\sbox\\Addons\\base\\code\\base.csproj",
         "projectName": "base",
-        "projectPath": "D:\\Gemes\\steamapps\\common\\sbox\\addons\\base\\code\\base.csproj",
+        "projectPath": "D:\\Gemes\\steamapps\\common\\sbox\\Addons\\base\\code\\base.csproj",
         "packagesPath": "C:\\Users\\Jake\\.nuget\\packages\\",
-        "outputPath": "D:\\Gemes\\steamapps\\common\\sbox\\addons\\base\\code\\obj\\",
+        "outputPath": "D:\\Gemes\\steamapps\\common\\sbox\\Addons\\base\\code\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\Jake\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -58,14 +58,14 @@
         }
       }
     },
-    "D:\\Gemes\\steamapps\\common\\sbox\\addons\\strafe\\code\\strafe.csproj": {
+    "D:\\Gemes\\steamapps\\common\\sbox\\Addons\\strafe\\code\\strafe.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\Gemes\\steamapps\\common\\sbox\\addons\\strafe\\code\\strafe.csproj",
+        "projectUniqueName": "D:\\Gemes\\steamapps\\common\\sbox\\Addons\\strafe\\code\\strafe.csproj",
         "projectName": "strafe",
-        "projectPath": "D:\\Gemes\\steamapps\\common\\sbox\\addons\\strafe\\code\\strafe.csproj",
+        "projectPath": "D:\\Gemes\\steamapps\\common\\sbox\\Addons\\strafe\\code\\strafe.csproj",
         "packagesPath": "C:\\Users\\Jake\\.nuget\\packages\\",
-        "outputPath": "D:\\Gemes\\steamapps\\common\\sbox\\addons\\strafe\\code\\obj\\",
+        "outputPath": "D:\\Gemes\\steamapps\\common\\sbox\\Addons\\strafe\\code\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\Jake\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -82,8 +82,8 @@
           "net5.0": {
             "targetAlias": "net5.0",
             "projectReferences": {
-              "D:\\Gemes\\steamapps\\common\\sbox\\addons\\base\\code\\base.csproj": {
-                "projectPath": "D:\\Gemes\\steamapps\\common\\sbox\\addons\\base\\code\\base.csproj"
+              "D:\\Gemes\\steamapps\\common\\sbox\\Addons\\base\\code\\base.csproj": {
+                "projectPath": "D:\\Gemes\\steamapps\\common\\sbox\\Addons\\base\\code\\base.csproj"
               }
             }
           }

@@ -30,7 +30,7 @@ namespace Strafe.Ply
 
 				if ( ammo > 0 )
 				{
-					player.GiveAmmo( ammoType, ammo );
+					//player.GiveAmmo( ammoType, ammo );
 
 					if ( notices )
 					{

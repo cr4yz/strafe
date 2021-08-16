@@ -66,8 +66,8 @@ namespace Strafe.Weapons
 				new Sandbox.ScreenShake.Perlin( 0.5f, 4.0f, 1.0f, 0.5f );
 			}
 
-			ViewModelEntity?.SetAnimParam( "fire", true );
-			CrosshairPanel?.OnEvent( "fire" );
+			ViewModelEntity?.SetAnimBool( "fire", true );
+			CrosshairPanel?.CreateEvent( "fire" );
 		}
 
 		public override void SimulateAnimator(PawnAnimator anim)

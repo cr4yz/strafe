@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "c6W1gBMSz0oMFn1iB5MZ1RYN5Ma85usDIEzAkwiL20w9R1P9MrQg8MRbZ6MGxIrpKZ+KQ+HYAR8yuxeOJljozg==",
+  "dgSpecHash": "tfoig2ydAfYF0uou7hzbKDvTQgAMUIbn+KPpRZChRVLQVx/bCxxz5rxn8fMW4FJeOE43zfSYn0mBidIjzYwHJA==",
   "success": true,
-  "projectFilePath": "D:\\Gemes\\steamapps\\common\\sbox\\addons\\strafe\\code\\strafe.csproj",
+  "projectFilePath": "D:\\Gemes\\steamapps\\common\\sbox\\Addons\\strafe\\code\\strafe.csproj",
   "expectedPackageFiles": [],
   "logs": []
 }

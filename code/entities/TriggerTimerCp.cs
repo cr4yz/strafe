@@ -1,5 +1,4 @@
 using Sandbox;
-using Sandbox.Hammer;
 using Strafe.Ply;
 
 namespace Strafe.Entities

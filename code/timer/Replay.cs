@@ -113,7 +113,7 @@ namespace Strafe.Timer
 
             foreach(InputButton btn in _inputBtns)
             {
-                if(client.Input.Down(btn))
+                if(Input.Down(btn))
                 {
                     result |= btn;
                 }

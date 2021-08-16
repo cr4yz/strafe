@@ -32,7 +32,7 @@ namespace Strafe.UI
 		{
 			base.Tick();
 
-			var open = Local.Pawn?.Input?.Down(InputButton.Score) ?? false;
+			var open = Input.Down(InputButton.Score);
 
 			SetClass("open", open);
 

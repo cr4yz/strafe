@@ -29,9 +29,10 @@ namespace Strafe.Weapons
 
 		public int AvailableAmmo()
 		{
-			var owner = Owner as StrafePlayer;
-			if (owner == null) return 0;
-			return owner.AmmoCount(AmmoType);
+			return 999;
+			//var owner = Owner as StrafePlayer;
+			//if (owner == null) return 0;
+			//return owner.AmmoCount(AmmoType);
 		}
 
 		public override void ActiveStart(Entity ent)
@@ -54,28 +55,28 @@ namespace Strafe.Weapons
 			PickupTrigger.Position = Position;
 		}
 
-		public override void Reload()
-		{
-			if (IsReloading)
-				return;
+		//public override void Reload()
+		//{
+		//	if (IsReloading)
+		//		return;
 
-			if (AmmoClip >= ClipSize)
-				return;
+		//	if (AmmoClip >= ClipSize)
+		//		return;
 
-			TimeSinceReload = 0;
+		//	TimeSinceReload = 0;
 
-			if (Owner is StrafePlayer player)
-			{
-				if (player.AmmoCount(AmmoType) <= 0)
-					return;
+		//	if (Owner is StrafePlayer player)
+		//	{
+		//		//if (player.AmmoCount(AmmoType) <= 0)
+		//		//	return;
 
-				StartReloadEffects();
-			}
+		//		StartReloadEffects();
+		//	}
 
-			IsReloading = true;
-			(Owner as AnimEntity).SetAnimBool("b_reload", true);
-			StartReloadEffects();
-		}
+		//	IsReloading = true;
+		//	(Owner as AnimEntity).SetAnimBool("b_reload", true);
+		//	StartReloadEffects();
+		//}
 
 		public override void Simulate(Client player)
 		{
@@ -97,16 +98,16 @@ namespace Strafe.Weapons
 
 		public virtual void OnReloadFinish()
 		{
-			IsReloading = false;
+			//IsReloading = false;
 
-			if (Owner is StrafePlayer player)
-			{
-				var ammo = player.TakeAmmo(AmmoType, ClipSize - AmmoClip);
-				if (ammo == 0)
-					return;
+			//if (Owner is StrafePlayer player)
+			//{
+			//	var ammo = player.TakeAmmo(AmmoType, ClipSize - AmmoClip);
+			//	if (ammo == 0)
+			//		return;
 
-				AmmoClip += ammo;
-			}
+			//	AmmoClip += ammo;
+			//}
 		}
 
 		[ClientRpc]
@@ -166,7 +167,7 @@ namespace Strafe.Weapons
 			}
 
 			ViewModelEntity?.SetAnimBool("fire", true);
-			CrosshairPanel?.OnEvent("fire");
+			CrosshairPanel?.CreateEvent("fire");
 		}
 
 		/// <summary>

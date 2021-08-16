@@ -27,12 +27,10 @@
 		<Reference Include="D:/Gemes/steamapps/common/sbox/bin/managed/Sandbox.System.dll"/>
 		<Reference Include="D:/Gemes/steamapps/common/sbox/bin/managed/Sandbox.Engine.dll"/>
 		<Reference Include="D:/Gemes/steamapps/common/sbox/bin/managed/Sandbox.Game.dll"/>
-		<Reference Include="D:/Gemes/steamapps/common/sbox/bin/managed/Sandbox.Hotload.dll"/>
 	</ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="D:\Gemes\steamapps\common\sbox\addons\base\code\base.csproj"></ProjectReference>
-
+<ProjectReference Include="D:\Gemes\steamapps\common\sbox\Addons\base\code\base.csproj" />
   </ItemGroup>
 
 </Project>

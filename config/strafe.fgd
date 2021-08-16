@@ -1,14 +1,133 @@
-@SolidClass base(Trigger) = trigger_timer_start :
-	"A trigger that starts the timer on exit."
+// 
+// Strafe.StrafeGame : Sandbox.Game 
+// 
+@PointClass = strafe : ""
 [
+	targetname(target_source) : "Name" : : "The name that other entities refer to this entity by."
+	parentname(target_destination) [ group="Hierarchy" ] : "Parent" : : "The name of this entity's parent in the movement hierarchy. Entities with parents move with their parent."
+	enable_shadows(boolean) [ group="Render Properties" ] : "Shadow Casting" : 1 : "Whether this entity should cast shadows or not"
 ]
 
-@SolidClass base(Trigger) = trigger_timer_end :
-	"A trigger that ends the timer on enter."
+// 
+// Strafe.Weapons.Smg : Strafe.Weapons.StrafeWeapon 
+// 
+@PointClass = dm_smg : ""
 [
+	targetname(target_source) : "Name" : : "The name that other entities refer to this entity by."
+	parentname(target_destination) [ group="Hierarchy" ] : "Parent" : : "The name of this entity's parent in the movement hierarchy. Entities with parents move with their parent."
+	enable_shadows(boolean) [ group="Render Properties" ] : "Shadow Casting" : 1 : "Whether this entity should cast shadows or not"
+
+	input SetColor(string) : "Sets the color of this entity. Format is '255 255 255 255'."
 ]
 
-@SolidClass base(Trigger) = trigger_timer_cp :
-	"A trigger that sets a checkpoint in a run."
+// 
+// Strafe.Entities.TriggerTimerCp : Sandbox.BaseTrigger 
+// 
+@SolidClass 
+metadata
+{
+	auto_apply_material = "materials/tools/toolstrigger.vmat"
+}
+= trigger_timer_cp : ""
 [
+	targetname(target_source) : "Name" : : "The name that other entities refer to this entity by."
+	parentname(target_destination) [ group="Hierarchy" ] : "Parent" : : "The name of this entity's parent in the movement hierarchy. Entities with parents move with their parent."
+	startdisabled(boolean) : "Start Disabled" : 0 : "Should this entity start disabled?"
+	enable_shadows(boolean) [ group="Render Properties" ] : "Shadow Casting" : 1 : "Whether this entity should cast shadows or not"
+	spawnflags(flags) = [
+		1 : "Clients" : 1
+		2 : "Npcs" : 0
+		4 : "Pushables" : 0
+		8 : "Physics Objects" : 0
+		16 : "Allied Npcs" : 0
+		32 : "Client In Vehicle" : 0
+		64 : "Everything" : 0
+		512 : "Client Not In Vehicle" : 0
+		1024 : "Physics Debris" : 0
+	]
+
+	input Enable(void) : "Enables this trigger"
+	input Disable(void) : "Disables this trigger"
+	input Toggle(void) : "Toggles this trigger between enabled and disabled states"
+	input SetColor(string) : "Sets the color of this entity. Format is '255 255 255 255'."
+
+	output OnStartTouch(void) : "Fired when an entity starts touching this trigger. The touching entity must pass this trigger's filters to cause this output to fire."
+	output OnEndTouch(void) : "Fired when an entity stops touching this trigger. Only entities that passed this trigger's filters will cause this output to fire."
+	output OnStartTouchAll(void) : "Fired when an entity starts touching this trigger while no other passing entities are touching it."
+	output OnEndTouchAll(void) : "Fired when all entities touching this trigger have stopped touching it."
 ]
+
+// 
+// Strafe.Entities.TriggerTimerEnd : Sandbox.BaseTrigger 
+// 
+@SolidClass 
+metadata
+{
+	auto_apply_material = "materials/tools/toolstrigger.vmat"
+}
+= trigger_timer_end : ""
+[
+	targetname(target_source) : "Name" : : "The name that other entities refer to this entity by."
+	parentname(target_destination) [ group="Hierarchy" ] : "Parent" : : "The name of this entity's parent in the movement hierarchy. Entities with parents move with their parent."
+	startdisabled(boolean) : "Start Disabled" : 0 : "Should this entity start disabled?"
+	enable_shadows(boolean) [ group="Render Properties" ] : "Shadow Casting" : 1 : "Whether this entity should cast shadows or not"
+	spawnflags(flags) = [
+		1 : "Clients" : 1
+		2 : "Npcs" : 0
+		4 : "Pushables" : 0
+		8 : "Physics Objects" : 0
+		16 : "Allied Npcs" : 0
+		32 : "Client In Vehicle" : 0
+		64 : "Everything" : 0
+		512 : "Client Not In Vehicle" : 0
+		1024 : "Physics Debris" : 0
+	]
+
+	input Enable(void) : "Enables this trigger"
+	input Disable(void) : "Disables this trigger"
+	input Toggle(void) : "Toggles this trigger between enabled and disabled states"
+	input SetColor(string) : "Sets the color of this entity. Format is '255 255 255 255'."
+
+	output OnStartTouch(void) : "Fired when an entity starts touching this trigger. The touching entity must pass this trigger's filters to cause this output to fire."
+	output OnEndTouch(void) : "Fired when an entity stops touching this trigger. Only entities that passed this trigger's filters will cause this output to fire."
+	output OnStartTouchAll(void) : "Fired when an entity starts touching this trigger while no other passing entities are touching it."
+	output OnEndTouchAll(void) : "Fired when all entities touching this trigger have stopped touching it."
+]
+
+// 
+// Strafe.Entities.TriggerTimerStart : Sandbox.BaseTrigger 
+// 
+@SolidClass 
+metadata
+{
+	auto_apply_material = "materials/tools/toolstrigger.vmat"
+}
+= trigger_timer_start : ""
+[
+	targetname(target_source) : "Name" : : "The name that other entities refer to this entity by."
+	parentname(target_destination) [ group="Hierarchy" ] : "Parent" : : "The name of this entity's parent in the movement hierarchy. Entities with parents move with their parent."
+	startdisabled(boolean) : "Start Disabled" : 0 : "Should this entity start disabled?"
+	enable_shadows(boolean) [ group="Render Properties" ] : "Shadow Casting" : 1 : "Whether this entity should cast shadows or not"
+	spawnflags(flags) = [
+		1 : "Clients" : 1
+		2 : "Npcs" : 0
+		4 : "Pushables" : 0
+		8 : "Physics Objects" : 0
+		16 : "Allied Npcs" : 0
+		32 : "Client In Vehicle" : 0
+		64 : "Everything" : 0
+		512 : "Client Not In Vehicle" : 0
+		1024 : "Physics Debris" : 0
+	]
+
+	input Enable(void) : "Enables this trigger"
+	input Disable(void) : "Disables this trigger"
+	input Toggle(void) : "Toggles this trigger between enabled and disabled states"
+	input SetColor(string) : "Sets the color of this entity. Format is '255 255 255 255'."
+
+	output OnStartTouch(void) : "Fired when an entity starts touching this trigger. The touching entity must pass this trigger's filters to cause this output to fire."
+	output OnEndTouch(void) : "Fired when an entity stops touching this trigger. Only entities that passed this trigger's filters will cause this output to fire."
+	output OnStartTouchAll(void) : "Fired when an entity starts touching this trigger while no other passing entities are touching it."
+	output OnEndTouchAll(void) : "Fired when all entities touching this trigger have stopped touching it."
+]
+
